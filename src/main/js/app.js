@@ -3,6 +3,9 @@
 const React = require('react');
 const ReactDOM = require('react-dom');
 const client = require('./client');
+const bootstrap = require('bootstrap')
+
+import Header from './components/Header'
 
 class App extends React.Component {
 
@@ -19,7 +22,10 @@ class App extends React.Component {
 
     render() {
         return (
-            <UserList users={this.state.users}/>
+            <div>
+                <Header/>
+                <UserList users={this.state.users}/>
+            </div>
         )
     }
 }
