@@ -6,7 +6,7 @@ Requirments:
 * weback
 
 Для запуска из корневой директории необходимо настроить
-конфиг `src/main/resources/application.properties`, который должен
+конфиг `/src/main/resources/application.properties`, который должен
 выглядить примерно следующим образом:
 ```
 spring.data.rest.base-path=/api
@@ -28,4 +28,6 @@ spring.session.store-type=none
 
 По итогу нужный `jar-файл` будет лежать в `/target` и для его запуска достаточно выполнить
 следующую команду:
-```java -jar gate-lib-0.0.1-SNAPSHOT.jar```
+```java -jar target/gate-lib-0.0.1-SNAPSHOT.jar```
+
+Сайт будет располагаться по адресу `127.0.0.1:8080`
