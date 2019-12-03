@@ -10,4 +10,9 @@ public class HomeController {
     public String index() {
         return "index";
     }
+
+    @RequestMapping(value = "/competitions")
+    public String competitions() {
+        return "competitions";
+    }
 }

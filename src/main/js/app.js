@@ -1,11 +1,13 @@
-'use strict';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Switch, Route, BrowserRouter } from 'react-router-dom'
 
-const React = require('react');
-const ReactDOM = require('react-dom');
 const client = require('./client');
 const bootstrap = require('bootstrap')
 
 import Header from './components/Header'
+import NotFound from './components/NotFound'
+import Competitions from './components/Competitions'
 
 class App extends React.Component {
 
@@ -23,7 +25,6 @@ class App extends React.Component {
     render() {
         return (
             <div>
-                <Header/>
                 <UserList users={this.state.users}/>
             </div>
         )
@@ -58,8 +59,17 @@ class User extends React.Component{
     }
 }
 
-ReactDOM.render(
-    <App />,
-    document.getElementById('react')
+const Main = () => (
+    <BrowserRouter>
+        <Header />
+        <Switch>
+            <Route exact path='/' component={App}/>
+            <Route path='/competitions' component={Competitions}/>
+        </Switch>
+    </BrowserRouter>
 )
 
+ReactDOM.render(
+    <Main />,
+    document.getElementById('react')
+)
