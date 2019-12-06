@@ -1,6 +1,7 @@
 package com.gate.gatelib.models;
 
 import javax.persistence.*;
+import java.util.Date;
 
 
 @Entity
@@ -20,10 +21,27 @@ public class Submission {
     // TODO: ENUM?
     private String lang;
 
+    private Date sendTS;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "set_id")
     private ProblemSet problemSet;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "problem_id")
+    private Problem problem;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    public Date getSendTS() { return sendTS; }
+
+    public void setSendTS(Date sendTS) { this.sendTS = sendTS; }
+
+    public User getUser() { return user; }
+
+    public void setUser(User user) { this.user = user; }
 
     public int getId() { return id; }
 
@@ -44,4 +62,8 @@ public class Submission {
     public ProblemSet getProblemSet() { return problemSet; }
 
     public void setProblemSet(ProblemSet problemSet) { this.problemSet = problemSet; }
+
+    public Problem getProblem() { return problem; }
+
+    public void setProblem(Problem problem) { this.problem = problem; }
 }

@@ -42,6 +42,12 @@ public class Group {
         this.users.add(user);
     }
 
+    public Set<ProblemSet> getSets() { return sets; }
+
+    public void setSets(Set<ProblemSet> sets) { this.sets = sets; }
+
+    public void addSet(ProblemSet set) { this.sets.add(set); }
+
     public Integer getId() {
         return id;
     }

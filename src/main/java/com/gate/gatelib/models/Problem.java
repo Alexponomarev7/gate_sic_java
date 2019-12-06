@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "problems")
@@ -20,6 +21,10 @@ public class Problem {
             joinColumns = @JoinColumn(name = "problems_id"),
             inverseJoinColumns = @JoinColumn(name = "sets_id"))
     private List<ProblemSet> sets;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL,
+            orphanRemoval = true, mappedBy = "problem")
+    private Set<Submission> submissions;
 
 
     @JsonIgnore
@@ -43,6 +48,8 @@ public class Problem {
         this.id = id;
     }
 
+
+
     public String getName() {
         return this.name;
     }
@@ -50,4 +57,11 @@ public class Problem {
     public void setName(String name) {
         this.name = name;
     }
+
+    @JsonIgnore
+    public Set<Submission> getSubmissions() { return submissions; }
+
+    public void setSubmissions(Set<Submission> submissions) { this.submissions = submissions; }
+
+    public void addSubmissions(Submission submission) { this.submissions.add(submission); }
 }
