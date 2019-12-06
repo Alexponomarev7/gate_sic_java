@@ -16,6 +16,10 @@ class ScoreData {
         this.score = score;
     }
 
+    static ScoreData getEmptyInstance() {
+        return new ScoreData("-", (float) 0);
+    }
+
     public String getTriesUntilSuccess() {
         return triesUntilSuccess;
     }
