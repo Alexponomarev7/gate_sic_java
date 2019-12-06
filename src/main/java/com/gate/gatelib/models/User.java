@@ -20,6 +20,7 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "groups_id"))
     private List<Group> groups;
 
+
     @JsonIgnore
     public List<Group> getGroups() {
         return groups;

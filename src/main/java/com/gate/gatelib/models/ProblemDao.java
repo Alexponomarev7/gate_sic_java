@@ -1,4 +1,7 @@
 package com.gate.gatelib.models;
 
-public class ProblemDao {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ProblemDao extends JpaRepository<Problem, Integer> {
+
 }

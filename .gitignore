@@ -31,3 +31,11 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### User-made: NODEJS ###
+node_modules/
+
+### User-made: compiled javascript ###
+bundle.js
+bundle.js.map
+

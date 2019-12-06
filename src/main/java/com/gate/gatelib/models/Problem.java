@@ -16,21 +16,22 @@ public class Problem {
     private String name;
 
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "problems_sets",
+    @JoinTable(name = "problems_problemsets",
             joinColumns = @JoinColumn(name = "problems_id"),
             inverseJoinColumns = @JoinColumn(name = "sets_id"))
-    private List<Set> sets;
+    private List<ProblemSet> sets;
+
 
     @JsonIgnore
-    public List<Set> getSets() {
+    public List<ProblemSet> getSets() {
         return sets;
     }
 
-    public void setSets(List<Set> sets) {
+    public void setSets(List<ProblemSet> sets) {
         this.sets = sets;
     }
 
-    public void addSet(Set set) {
+    public void addSet(ProblemSet set) {
         this.sets.add(set);
     }
 

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "groups")
@@ -20,6 +21,13 @@ public class Group {
             joinColumns = @JoinColumn(name = "groups_id"),
             inverseJoinColumns = @JoinColumn(name = "users_id"))
     private List<User> users;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "groups_sets",
+            joinColumns = @JoinColumn(name = "groups_id"),
+            inverseJoinColumns = @JoinColumn(name = "sets_id"))
+    private Set<ProblemSet> sets;
+
 
     @JsonIgnore
     public List<User> getUsers() {
