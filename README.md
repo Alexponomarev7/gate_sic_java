@@ -15,8 +15,8 @@ spring.datasource.driver-class-name=org.postgresql.Driver
 
 # your-postgres gate_sic db
 spring.datasource.url=jdbc:postgresql://localhost:5432/gate_sic 
-spring.datasource.username=**{YOUR POSTGRES USER HERE}**
-spring.datasource.password=**{YOUR POSTGRES PASSWORD HERE}**
+spring.datasource.username={YOUR POSTGRES USER HERE}
+spring.datasource.password={YOUR POSTGRES PASSWORD HERE}
 
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQL9Dialect
 
@@ -33,4 +33,4 @@ spring.session.store-type=none
 следующую команду:
 ```java -jar target/gate-lib-0.0.1-SNAPSHOT.jar```
 
-Сайт будет располагаться по адресу `[127.0.0.1:8080]`
+Сайт будет располагаться по адресу [`127.0.0.1:8080`]
