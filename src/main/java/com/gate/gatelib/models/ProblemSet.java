@@ -1,6 +1,7 @@
 package com.gate.gatelib.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "problemsets")
+@Data
 public class ProblemSet {
 
     @Id
@@ -37,45 +39,13 @@ public class ProblemSet {
         return problems;
     }
 
-    public void setProblems(List<Problem> problems) {
-        this.problems = problems;
-    }
-
-    public void addProblem(Problem problem) {
-        this.problems.add(problem);
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     @JsonIgnore
     public Set<Group> getGroups() {
         return groups;
     }
 
-    public void setGroups(Set<Group> groups) { this.groups = groups; }
-
-    public void addGroup(Group group) { this.groups.add(group); }
-
     @JsonIgnore
     public Set<Submission> getSubmissions() {
         return submissions;
     }
-
-    public void setSubmissions(Set<Submission> submissions) { this.submissions = submissions; }
-
-    public void addSubmissions(Submission submission) { this.submissions.add(submission); }
 }
