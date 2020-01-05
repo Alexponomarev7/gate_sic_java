@@ -8,6 +8,8 @@ const bootstrap = require('bootstrap')
 import Header from './components/Header'
 import NotFound from './components/NotFound'
 import Competitions from './components/Competitions'
+import Login from './components/Login'
+import Registration from "./components/Registration";
 
 class App extends React.Component {
 
@@ -41,6 +43,7 @@ class UserList extends React.Component{
                 <tbody>
                 <tr>
                     <th>Id</th>
+                    <th>Pass</th>
                 </tr>
                 {users}
                 </tbody>
@@ -53,7 +56,8 @@ class User extends React.Component{
     render() {
         return (
             <tr>
-                <td>{this.props.user.name}</td>
+                <td>{this.props.user.username}</td>
+                <td>{this.props.user.password}</td>
             </tr>
         )
     }
@@ -65,6 +69,8 @@ const Main = () => (
         <Switch>
             <Route exact path='/' component={App}/>
             <Route path='/competitions' component={Competitions}/>
+            <Route path='/login' component={Login}/>
+            <Route path='/registration' component={Registration}/>
         </Switch>
     </BrowserRouter>
 )
