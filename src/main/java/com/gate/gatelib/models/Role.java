@@ -1,5 +1,6 @@
 package com.gate.gatelib.models;
 
+import org.hibernate.annotations.NaturalId;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
@@ -10,19 +11,18 @@ import java.util.Set;
 public class Role implements GrantedAuthority {
     @Id
     private Long id;
-    private String name;
+
+    @Enumerated(EnumType.STRING)
+    @Column(length = 60)
+    private RoleName name;
+
     @Transient
     @ManyToMany(mappedBy = "roles")
     private Set<User> users;
-    public Role() {
-    }
 
-    public Role(Long id) {
-        this.id = id;
-    }
+    public Role() { }
 
-    public Role(Long id, String name) {
-        this.id = id;
+    public Role(RoleName name) {
         this.name = name;
     }
 
@@ -34,11 +34,11 @@ public class Role implements GrantedAuthority {
         this.id = id;
     }
 
-    public String getName() {
+    public RoleName getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(RoleName name) {
         this.name = name;
     }
 
@@ -52,6 +52,6 @@ public class Role implements GrantedAuthority {
 
     @Override
     public String getAuthority() {
-        return getName();
+        return getName().name();
     }
 }
