@@ -80,6 +80,12 @@ public class RegistrationController {
                     "Username is already taken!");
         }
 
+        if (!signUpRequest.getPassword().equals(signUpRequest.getConfirmPassword())) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Passwords do not match"
+            );
+        }
+
         // Creating user's account
         User user = new User(signUpRequest.getUsername(), signUpRequest.getPassword());
 

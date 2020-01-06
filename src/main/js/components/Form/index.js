@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Input from './../Input'
+import {notification} from 'antd'
 
 class Form extends Component {
 
@@ -14,13 +15,12 @@ class Form extends Component {
     }
 
     handleSubmit = (event) => {
-        event.preventDefault()
+        event.preventDefault();
         if(!this.state.errcount) {
-            const data = new FormData(this.form)
+            const data = new FormData(this.form);
             let object = {};
             data.forEach((value, key) => {object[key] = value});
             let json = JSON.stringify(object);
-            console.log(json)
             fetch(this.form.action, {
                 method: this.form.method,
                 headers: new Headers({
@@ -28,29 +28,34 @@ class Form extends Component {
                 }),
                 body: json
             }).then(v => {
+                if (v.ok) {
+                    v.text().then(text => {
+                        notification.success({
+                            message: 'Gate',
+                            description: text
+                        });
+                    });
+                    // TODO: change screen (without redirect).
+                } else {
+                    v.json().then(json => {
+                        notification.error({
+                            message: 'Gate',
+                            description: json.message
+                        });
+                    });
+                }
                 if(v.redirected) window.location = v.url
-            })
-                .catch(e => console.warn(e))
-        }
-    }
-
-    handleError = (field, errmsg) => {
-        if(!field) return
-
-        if(errmsg){
-            this.setState((prevState) => ({
-                failure: '',
-                errcount: prevState.errcount + 1,
-                errmsgs: {...prevState.errmsgs, [field]: errmsg}
-            }))
+            }).catch(e => {
+                notification.error({
+                    message: 'Gate',
+                    description: 'Something went wrong. Please try again.'
+                });
+                console.warn(e);
+            });
         } else {
-            this.setState((prevState) => ({
-                failure: '',
-                errcount: prevState.errcount===1? 0 : prevState.errcount-1,
-                errmsgs: {...prevState.errmsgs, [field]: ''}
-            }))
+            console.log(this.state);
         }
-    }
+    };
 
     renderError = () => {
         if(this.state.errcount || this.state.failure) {
@@ -58,14 +63,14 @@ class Form extends Component {
             console.log(`error: ${errmsg}`)
             return <div className="error">{errmsg}</div>
         }
-    }
+    };
 
     render() {
         const inputs = this.props.inputs.map(
             ({name, placeholder, type, value, className}, index) => (
                 <div className="input-group mb-3">
                     <Input key={index} name={name} placeholder={placeholder} type={type} value={value}
-                       className={type==='submit'? className : 'form-control'} handleError={this.handleError} />
+                       className={type==='submit'? className : 'form-control'} />
                 </div>
             )
         )

@@ -28,7 +28,7 @@ const params = new URLSearchParams(window.location.search)
 class Registration extends React.Component {
     render() {
         return (
-            <Form {...props} error={params.get('error')} />
+            <Form {...props} />
         );
     }
 }
