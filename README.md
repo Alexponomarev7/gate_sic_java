@@ -27,6 +27,9 @@ spring.session.store-type=none
 
 app.jwtSecret= JWTSuperSecretKey
 app.jwtExpirationInMs = 604800000
+
+# This removes trace from ResponseStatusException
+server.error.include-stacktrace=on_trace_param
 ```
 
 Далее необходимо собрать `jar-файл` с помощью команды:
