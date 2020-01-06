@@ -4,7 +4,6 @@ import com.gate.gatelib.models.RoleName;
 import com.gate.gatelib.models.User;
 import com.gate.gatelib.payload.LoginRequest;
 import com.gate.gatelib.service.UserService;
-import com.gate.gatelib.exception.AppException;
 import com.gate.gatelib.models.Role;
 import com.gate.gatelib.models.User;
 import com.gate.gatelib.payload.ApiResponse;
@@ -77,8 +76,8 @@ public class RegistrationController {
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
         if(userDao.existsByUsername(signUpRequest.getUsername())) {
-            return new ResponseEntity(new ApiResponse(false, "Username is already taken!"),
-                    HttpStatus.BAD_REQUEST);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Username is already taken!");
         }
 
         // Creating user's account
@@ -87,7 +86,8 @@ public class RegistrationController {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         Role userRole = roleDao.findByName(RoleName.ROLE_USER)
-                .orElseThrow(() -> new AppException("User Role not set."));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        "User Role not set."));
 
         user.setRoles(Collections.singleton(userRole));
 
@@ -97,6 +97,6 @@ public class RegistrationController {
                 .fromCurrentContextPath().path("/api/users/{username}")
                 .buildAndExpand(result.getUsername()).toUri();
 
-        return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully"));
+        return ResponseEntity.created(location).body("User registered successfully");
     }
 }
