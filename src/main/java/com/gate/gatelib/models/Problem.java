@@ -1,6 +1,8 @@
 package com.gate.gatelib.models;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import java.util.List;
@@ -49,7 +51,7 @@ public class Problem {
     }
 
 
-
+    @JsonGetter("name")
     public String getName() {
         return this.name;
     }

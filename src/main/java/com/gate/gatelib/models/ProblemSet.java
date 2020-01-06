@@ -1,6 +1,9 @@
 package com.gate.gatelib.models;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import java.util.List;
@@ -12,6 +15,7 @@ public class ProblemSet {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private int id;
 
     private String name;
@@ -20,6 +24,7 @@ public class ProblemSet {
     @JoinTable(name = "problems_problemsets",
             joinColumns = @JoinColumn(name = "sets_id"),
             inverseJoinColumns = @JoinColumn(name = "problems_id"))
+
     private List<Problem> problems;
 
     @ManyToMany(cascade = CascadeType.ALL)
@@ -32,7 +37,6 @@ public class ProblemSet {
             orphanRemoval = true, mappedBy = "problemSet")
     private Set<Submission> submissions;
 
-    @JsonIgnore
     public List<Problem> getProblems() {
         return problems;
     }

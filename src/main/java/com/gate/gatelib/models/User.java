@@ -116,4 +116,8 @@ public class User implements UserDetails {
         this.id = id;
     }
 
+    public Set<Submission> getSubmissions() {
+        return this.submissions;
+    }
+
 }
