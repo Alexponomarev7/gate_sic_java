@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/spring-guides/tut-react-and-spring-data-rest",
   "dependencies": {
+    "antd": "^3.2.2",
     "@babel/plugin-proposal-class-properties": "^7.7.4",
     "antd": "^3.26.6",
     "bootstrap": "^4.4.1",
