@@ -24,6 +24,9 @@ spring.jpa.hibernate.ddl-auto=update
 spring.jpa.generate-ddl=true
 spring.jpa.show-sql=true
 spring.session.store-type=none
+
+app.jwtSecret= JWTSuperSecretKey
+app.jwtExpirationInMs = 604800000
 ```
 
 Далее необходимо собрать `jar-файл` с помощью команды:
