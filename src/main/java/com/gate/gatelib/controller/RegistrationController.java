@@ -42,6 +42,11 @@ public class RegistrationController {
                     HttpStatus.BAD_REQUEST, "Username already exists"
             );
         }
+        if (!signUpRequest.getPassword().equals(signUpRequest.getConfirmPassword())) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Passwords do not match"
+            );
+        }
         User user = new User();
         user.setUsername(signUpRequest.getUsername());
         user.setPassword(signUpRequest.getPassword());
