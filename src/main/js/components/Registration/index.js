@@ -21,7 +21,7 @@ const inputs = [{
     className: "btn"
 }]
 
-const props = {name: 'registrationForm', method: 'POST', action: '/registration', inputs: inputs}
+const props = {name: 'registrationForm', method: 'POST', action: '/api/auth/signup', inputs: inputs}
 
 const params = new URLSearchParams(window.location.search)
 

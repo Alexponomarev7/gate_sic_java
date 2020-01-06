@@ -18,7 +18,7 @@ const inputs = [{
     className: "btn"
 }]
 
-const props = {name: 'loginForm', method: 'POST', action: '/perform_login', inputs: inputs}
+const props = {name: 'loginForm', method: 'POST', action: '/api/auth/signin', inputs: inputs}
 
 const params = new URLSearchParams(window.location.search)
 
