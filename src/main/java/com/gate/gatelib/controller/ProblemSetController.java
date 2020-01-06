@@ -1,16 +1,17 @@
 package com.gate.gatelib.controller;
 
-import com.gate.gatelib.models.ProblemSet;
-import com.gate.gatelib.models.Submission;
-import com.gate.gatelib.models.User;
+import com.gate.gatelib.models.*;
 import com.gate.gatelib.repository.UserDao;
 import com.gate.gatelib.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import sun.java2d.windows.GDIRenderer;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -33,10 +34,9 @@ public class ProblemSetController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "user not found");
         }
         Set<ProblemSet> set = new HashSet<>();
-        for (Submission s : u.getSubmissions()) {
-            set.add(s.getProblemSet());
+        for (Group s : u.getGroups()) {
+            set.addAll(s.getSets());
         };
-
         return set;
     }
 }
