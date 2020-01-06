@@ -26,7 +26,7 @@ class Login extends React.Component {
     render() {
         return (
             <div>
-                <Form {...props} error={params.get('error')} />
+                <Form {...props} />
                 <h4><Link to={"/registration"}>Зарегистрироваться</Link></h4>
             </div>
     );
