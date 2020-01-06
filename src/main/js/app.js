@@ -11,11 +11,16 @@ import Competitions from './components/Competitions'
 import Login from './components/Login'
 import Registration from "./components/Registration";
 
-class App extends React.Component {
+import { Layout, notification } from 'antd';
+import {getCurrentUser} from "./util/APIUtils";
+const { Content } = Layout;
 
+class App extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {users: []};
+        this.state = {
+            users: [],
+        };
     }
 
     componentDidMount() {
@@ -63,17 +68,75 @@ class User extends React.Component{
     }
 }
 
-const Main = () => (
-    <BrowserRouter>
-        <Header />
-        <Switch>
-            <Route exact path='/' component={App}/>
-            <Route path='/competitions' component={Competitions}/>
-            <Route path='/login' component={Login}/>
-            <Route path='/registration' component={Registration}/>
-        </Switch>
-    </BrowserRouter>
-)
+class Main extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            currentUser: null,
+            isAuthenticated: false,
+            isLoading: false
+        };
+        //this.handleLogout = this.handleLogout.bind(this);
+        this.loadCurrentUser = this.loadCurrentUser.bind(this);
+        this.handleLogin = this.handleLogin.bind(this);
+
+        notification.config({
+            placement: 'topRight',
+            top: 70,
+            duration: 3,
+        });
+    }
+
+    loadCurrentUser() {
+        this.setState({
+            isLoading: true
+        });
+        getCurrentUser()
+            .then(response => {
+                this.setState({
+                    currentUser: response,
+                    isAuthenticated: true,
+                    isLoading: false
+                });
+            }).catch(error => {
+            this.setState({
+                isLoading: false
+            });
+        });
+    }
+
+    componentDidMount() {
+        this.loadCurrentUser();
+    }
+
+    handleLogin() {
+        notification.success({
+            message: 'Polling App',
+            description: "You're successfully logged in.",
+        });
+        this.loadCurrentUser();
+        this.props.history.push("/");
+    }
+
+    render() {
+        if(this.state.isLoading) {
+            return <p>loading..</p>
+        }
+
+        return (
+            <BrowserRouter>
+                <Header isAuthenticated={this.state.isAuthenticated}
+                        currentUser={this.state.currentUser} />
+                <Switch>
+                    <Route exact path='/' component={App}/>
+                    <Route path='/competitions' component={Competitions}/>
+                    <Route path='/login' component={Login}/>
+                    <Route path='/registration' component={Registration}/>
+                </Switch>
+            </BrowserRouter>
+        );
+    }
+}
 
 ReactDOM.render(
     <Main />,
