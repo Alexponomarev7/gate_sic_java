@@ -94,7 +94,7 @@ public class RegistrationController {
         User result = userDao.save(user);
 
         URI location = ServletUriComponentsBuilder
-                .fromCurrentContextPath().path("/api/users/{username}")
+                .fromCurrentContextPath().path("/users/{username}")
                 .buildAndExpand(result.getUsername()).toUri();
 
         return ResponseEntity.created(location).body("User registered successfully");
