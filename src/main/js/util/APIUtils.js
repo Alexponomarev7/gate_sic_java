@@ -40,3 +40,14 @@ export function getCurrentUser() {
         method: 'GET'
     });
 }
+
+export function loadContests() {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: "/api/contests",
+        method: 'GET'
+    });
+}
