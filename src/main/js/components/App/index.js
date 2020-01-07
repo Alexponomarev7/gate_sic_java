@@ -41,6 +41,7 @@ class Main extends React.Component {
 
     loadCurrentUser() {
         this.props.loginAuth()
+        console.log("authing...")
         getCurrentUser()
             .then(response => {
                 this.props.login(response)
@@ -54,14 +55,15 @@ class Main extends React.Component {
     }
 
     handleLogin() {
-        notification.success({
-            message: 'Gate',
-            description: 'Login succeed!!!!'
-        });
 
         this.props.history.push("/");
 
         this.loadCurrentUser();
+
+        notification.success({
+            message: 'Gate',
+            description: 'Login succeed!!!!'
+        });
     }
 
     handleLogout(redirectTo="/", notificationType="success", description="You're successfully logged out.") {
@@ -95,7 +97,7 @@ class Main extends React.Component {
                     <Route path='/competitions' component={Competitions}/>
                     <Route path="/login"
                            render={(props) => <Login handleLogin={this.handleLogin} {...props} />}/>
-                    <Route path='/registration' component={Registration}/>
+                    <Route path='/registration' render={(props) => <Registration {...props}/>}/>
                 </Switch>
             </Layout>
         );
@@ -115,12 +117,12 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        login: (user) => dispatch({type: "USER_AUTH", payload: user}),
-        loginFail: (err) => dispatch({type: "USER_FAIL", payload: err}),
-        loginAuth: () => dispatch({type: "USER_FETCHING"}),
-        logout: () => dispatch({type:"USER_ANONYMOUS", payload: null})
+        login: (user) => dispatch({type: 'USER_AUTH', user}),
+        loginFail: (err) => dispatch({type: 'USER_FAIL', err}),
+        loginAuth: () => dispatch({type: 'USER_FETCHING'}),
+        logout: () => dispatch({type:'USER_ANONYMOUS'}),
     }
 
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Main));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Main));

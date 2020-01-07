@@ -4,25 +4,22 @@ const initialState = {
     data: null,
     currentUser: null,
     isAuthenticated: false,
+    history: null,
 }
 
 const userReducer = (state = initialState, action) => {
+    console.warn(action)
     switch (action.type) {
         case 'USER_FETCHING':
             return {
                 ...state,
-                currentUser: null,
-                isAuthenticated: false,
-                error: null,
+                isAuthenticated: true,
                 isLoading: true
             };
         case 'USER_FAIL':
             return {
                 ...state,
-                currentUser: null,
-                isAuthenticated: false,
                 isLoading: false,
-                error: action.payload
             };
         case 'USER_ANONYMOUS':
             return {
@@ -31,14 +28,13 @@ const userReducer = (state = initialState, action) => {
                 isAuthenticated: false,
                 isLoading: false,
                 error: null,
-                data: action.payload
+                data: null,
             };
         case 'USER_AUTH':
             return {
                 ...state,
                 currentUser: action.payload,
                 isAuthenticated: true,
-                error: null,
                 isLoading: false
             };
         case 'DATA_DONE':
@@ -54,6 +50,7 @@ const userReducer = (state = initialState, action) => {
               error: action.payload
             };
         default:
+            console.warn("default state reached")
             return state;
     }
 };
