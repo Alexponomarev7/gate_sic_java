@@ -41,6 +41,18 @@ const userReducer = (state = initialState, action) => {
                 error: null,
                 isLoading: false
             };
+        case 'DATA_DONE':
+            return {
+                ...state,
+                isLoading: false,
+                data: action.payload
+            };
+        case 'DATA_FAIL':
+            return {
+              ...state,
+              isLoading: false,
+              error: action.payload
+            };
         default:
             return state;
     }

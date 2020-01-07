@@ -16,7 +16,7 @@ class LoginForm extends Form {
 
     handleSubmit = (event) => {
         event.preventDefault();
-        if(!this.state.errcount) {
+        if(!this.props.error) {
             const data = new FormData(this.form);
             let object = {};
             data.forEach((value, key) => {object[key] = value});
@@ -50,7 +50,7 @@ class LoginForm extends Form {
                 console.warn(e);
             });
         } else {
-            console.log(this.state);
+            console.log(this.props);
         }
     };
 
