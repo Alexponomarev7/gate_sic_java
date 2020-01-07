@@ -10,6 +10,7 @@ import Competitions from './../Competitions'
 import Login from './../Login'
 import Registration from "./../Registration";
 import Index from "./../Index"
+import Competition from "./../Competition";
 
 import { Layout, notification } from 'antd';
 import {getCurrentUser} from "./../../util/APIUtils";
@@ -104,6 +105,7 @@ class Main extends React.Component {
                         handleLogout={this.handleLogout}/>
                 <Switch>
                     <Route exact path='/' component={Index}/>
+                    <Route path='/competitions/:number' component={Competition}/>
                     <Route path='/competitions' component={Competitions}/>
                     <Route path="/login"
                            render={(props) => <Login handleLogin={this.handleLogin} {...props} />}/>

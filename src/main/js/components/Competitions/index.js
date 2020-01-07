@@ -1,5 +1,6 @@
 import React from 'react'
 import { loadContests } from './../../util/APIUtils'
+import { Link } from 'react-router-dom'
 
 class CompetitionList extends React.Component {
     constructor(props) {
@@ -11,6 +12,11 @@ class CompetitionList extends React.Component {
             <tr>
                 <th scope="row">{this.props.competition.id}</th>
                 <td>{this.props.competition.name}</td>
+                <td><Link to={'/competitions/' + this.props.competition.id}
+                          className={'btn btn-outline-primary my-2 my-sm-0'}>
+                        Войти
+                    </Link>
+                </td>
             </tr>
         )
     }
@@ -38,6 +44,7 @@ class Competitions extends React.Component {
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Contest name</th>
+                            <th scope="col">Enter</th>
                         </tr>
                     </thead>
                     <tbody>
