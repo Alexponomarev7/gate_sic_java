@@ -25,7 +25,7 @@ const request = (options) => {
 
 export function getUserProfile(username) {
     return request({
-        url: API_BASE_URL + "/users/" + username,
+        url: API_BASE_URL + "/us!!!ers/" + username,
         method: 'GET'
     });
 }
@@ -36,7 +36,7 @@ export function getCurrentUser() {
     }
 
     return request({
-        url: API_BASE_URL + "/user/me",
+        url: "/users/me",
         method: 'GET'
     });
 }

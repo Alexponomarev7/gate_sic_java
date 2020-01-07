@@ -1,5 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom'
+import Item from "antd/es/list/Item";
+import {
+    Route,
+    withRouter,
+    Switch
+} from 'react-router-dom';
 
 class LoginRegisterButton extends React.Component {
     constructor(props) {
@@ -8,7 +14,10 @@ class LoginRegisterButton extends React.Component {
 
     render() {
         if (this.props.isAuthenticated) {
-            return (<a>"Hi, "</a>)
+            return (
+            <Item onClick={this.props.handleLogout}
+                  className={"btn btn-outline-primary my-2 my-sm-0"}>Выход</Item>
+            )
         }
         return (
             <Link to={'/login'} className={"btn btn-outline-primary my-2 my-sm-0"}>Вход / регистрация</Link>
@@ -16,4 +25,4 @@ class LoginRegisterButton extends React.Component {
     }
 }
 
-export default LoginRegisterButton;
+export default withRouter(LoginRegisterButton);

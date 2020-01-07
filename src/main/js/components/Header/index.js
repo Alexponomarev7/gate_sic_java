@@ -1,6 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom'
 import LoginRegisterButton from './LoginRegisterButton'
+import {
+    Route,
+    withRouter,
+    Switch
+} from 'react-router-dom';
 
 import './index.css'
 
@@ -49,11 +54,13 @@ class Header extends React.Component {
                         <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                     </form>
                     <LoginRegisterButton isAuthenticated={this.props.isAuthenticated}
-                                                        currentUser={this.props.currentUser} />
+                                         currentUser={this.props.currentUser}
+                                         handleLogout={this.props.handleLogout}
+                    />
                 </div>
             </nav>
         );
     }
 }
 
-export default Header;
+export default withRouter(Header);

@@ -5,9 +5,10 @@ import {notification} from 'antd'
 
 class Form extends Component {
 
-    constructor(props){
-        super(props)
-        if(props.error){
+    constructor(props) {
+        super(props);
+
+        if (props.error){
             this.state = { failure: 'wrong username or password!', errcount: 0 }
         }else{
             this.state = { errcount: 0 }
@@ -27,24 +28,8 @@ class Form extends Component {
                   'Content-Type': 'application/json'
                 }),
                 body: json
-            }).then(v => {
-                if (v.ok) {
-                    v.text().then(text => {
-                        notification.success({
-                            message: 'Gate',
-                            description: text
-                        });
-                    });
-                    // TODO: change screen (without redirect).
-                } else {
-                    v.json().then(json => {
-                        notification.error({
-                            message: 'Gate',
-                            description: json.message
-                        });
-                    });
-                }
-                if(v.redirected) window.location = v.url
+            }).then(response => {
+                this.props.onSuccess(response);
             }).catch(e => {
                 notification.error({
                     message: 'Gate',
@@ -73,7 +58,7 @@ class Form extends Component {
                        className={type==='submit'? className : 'form-control'} />
                 </div>
             )
-        )
+        );
         const errors = this.renderError()
         return (
             <div class="container">
@@ -92,6 +77,6 @@ Form.propTypes = {
     method: PropTypes.string,
     inputs: PropTypes.array,
     error: PropTypes.string
-}
+};
 
 export default Form;
