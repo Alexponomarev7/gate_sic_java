@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
+// FIXME unused
 class Input extends Component {
 
     constructor(props){
@@ -52,27 +53,6 @@ Input.propTypes = {
     className: PropTypes.string,
     handleError: PropTypes.func,
     value: PropTypes.string
-}
-
-function mapStateToProps(state) {
-    const tmp = state.userReducer
-
-    return {
-        error: tmp.error,
-        isLoading: tmp.isLoading,
-        isAuthenticated: tmp.isAuthenticated,
-        currentUser: tmp.currentUser
-    }
-}
-
-function mapDispatchToProps(dispatch) {
-    return {
-        login: (user) => dispatch({type: "USER_AUTH", payload: user}),
-        loginFail: (err) => dispatch({type: "USER_FAIL", payload: err}),
-        loginAuth: () => dispatch({type: "USER_FETCHING"}),
-        logout: () => dispatch({type:"USER_ANONYMOUS", payload: null}),
-    }
-
 }
 
 export default Input

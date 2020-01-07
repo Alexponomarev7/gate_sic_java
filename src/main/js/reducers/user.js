@@ -8,7 +8,6 @@ const initialState = {
 }
 
 const userReducer = (state = initialState, action) => {
-    console.warn(action)
     switch (action.type) {
         case 'USER_FETCHING':
             return {
