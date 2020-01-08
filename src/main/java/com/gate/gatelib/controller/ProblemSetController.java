@@ -36,6 +36,7 @@ public class ProblemSetController {
         if (u == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "user not found");
         }
+        // TODO: do it on sql
         Set<ProblemSet> set = new HashSet<>();
         for (Group g : u.getGroups()) {
             set.addAll(g.getSets());
