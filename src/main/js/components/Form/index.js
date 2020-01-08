@@ -3,21 +3,16 @@ import PropTypes from 'prop-types'
 import Input from './../Input'
 import {notification} from 'antd'
 
+
 class Form extends Component {
 
     constructor(props) {
         super(props);
-
-        if (props.error){
-            this.state = { failure: 'wrong username or password!', errcount: 0 }
-        }else{
-            this.state = { errcount: 0 }
-        }
     }
 
     handleSubmit = (event) => {
         event.preventDefault();
-        if(!this.state.errcount) {
+        if(!this.props.error) {
             const data = new FormData(this.form);
             let object = {};
             data.forEach((value, key) => {object[key] = value});
@@ -38,16 +33,16 @@ class Form extends Component {
                 console.warn(e);
             });
         } else {
-            console.log(this.state);
+            console.log(this.props);
         }
     };
 
     renderError = () => {
-        if(this.state.errcount || this.state.failure) {
-            const errmsg = this.state.failure || Object.values(this.state.errmsgs).find(v=>v)
-            console.log(`error: ${errmsg}`)
-            return <div className="error">{errmsg}</div>
+        if (!this.props.error) {
+            return;
         }
+        console.log(`error: ${this.props.error}`)
+        return <div className="error">{this.props.error}</div>
     };
 
     render() {
@@ -76,7 +71,6 @@ Form.propTypes = {
     action: PropTypes.string,
     method: PropTypes.string,
     inputs: PropTypes.array,
-    error: PropTypes.string
 };
 
 export default Form;

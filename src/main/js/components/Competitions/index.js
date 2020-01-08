@@ -1,6 +1,7 @@
 import React from 'react'
 import { loadContests } from './../../util/APIUtils'
 import { Link } from 'react-router-dom'
+import {connect} from "react-redux";
 
 class CompetitionList extends React.Component {
     constructor(props) {
@@ -29,9 +30,11 @@ class Competitions extends React.Component {
     }
 
     componentDidMount() {
+        this.props.loading();
+
         loadContests().then(response => {
             self.competitions = response.map(competition => <CompetitionList competition={competition}/>);
-            this.forceUpdate();
+            this.props.loaded();
         });
     }
 
@@ -56,4 +59,28 @@ class Competitions extends React.Component {
     }
 }
 
-export default Competitions;
+function mapStateToProps(state) {
+    const tmp = state.userReducer;
+
+    return {
+        error: tmp.error,
+        isLoading: tmp.isLoading,
+        isAuthenticated: tmp.isAuthenticated,
+        currentUser: tmp.currentUser,
+        loading: tmp.componentIsLoading
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        login: (user) => dispatch({type: 'USER_AUTH', user}),
+        loginFail: (err) => dispatch({type: 'USER_FAIL', err}),
+        loginAuth: () => dispatch({type: 'USER_FETCHING'}),
+        logout: () => dispatch({type:'USER_ANONYMOUS'}),
+        loading: () => dispatch({type:'COMPONENT_LOADING'}),
+        loaded: () => dispatch({type: 'COMPONENT_LOADED'})
+    }
+
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Competitions);

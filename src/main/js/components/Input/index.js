@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
+// FIXME unused
 class Input extends Component {
 
     constructor(props){
@@ -27,10 +28,10 @@ class Input extends Component {
 
     validate = (name, value, validRegex, warnmsg) => {
         const invalid = !value || !validRegex.test(value)
-        if(!this.state.error && invalid) {
+        if(!this.props.error && invalid) {
             this.setState({ className: 'input-error', error: true })
             this.handleError(name, warnmsg)
-        }else if(this.state.error && !invalid) {
+        }else if(this.props.error && !invalid) {
             this.setState({ className: '', error: false })
             this.handleError(name)
         }
@@ -40,7 +41,7 @@ class Input extends Component {
         const {handleError, ...opts} = this.props
         this.handleError = handleError
         return (
-            <input {...opts} value={this.state.value} onChange={this.inputChange} className={this.state.className} />
+            <input {...opts} value={this.props.value} onChange={this.inputChange} className={this.props.className} />
         )
     }
 }

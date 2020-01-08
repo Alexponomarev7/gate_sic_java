@@ -1,22 +1,23 @@
 import React, { Component } from 'react'
-import Form from './../Form'
-import {notification} from 'antd'
-import {ACCESS_TOKEN} from "../../constants";
-import {
-    Route,
-    withRouter,
-    Switch
-} from 'react-router-dom';
+import PropTypes from 'prop-types'
 
-class LoginForm extends Form {
+import {notification} from 'antd'
+
+class Form extends Component {
+
     constructor(props) {
         super(props);
-        console.log("hi", props);
+
+        if (props.error){
+            this.state = { failure: 'wrong username or password!', errcount: 0 }
+        }else{
+            this.state = { errcount: 0 }
+        }
     }
 
     handleSubmit = (event) => {
         event.preventDefault();
-        if(!this.props.error) {
+        if(!this.state.errcount) {
             const data = new FormData(this.form);
             let object = {};
             data.forEach((value, key) => {object[key] = value});
@@ -28,20 +29,7 @@ class LoginForm extends Form {
                 }),
                 body: json
             }).then(response => {
-                if (response.ok) {
-                    response.json().then(json => {
-                        localStorage.setItem(ACCESS_TOKEN, json.accessToken);
-                    });
-
-                    this.props.handleLogin();
-                } else {
-                    response.json().then(json => {
-                        notification.error({
-                            message: 'Gate',
-                            description: json.message
-                        });
-                    });
-                }
+                this.props.onSuccess(response);
             }).catch(e => {
                 notification.error({
                     message: 'Gate',
@@ -50,10 +38,26 @@ class LoginForm extends Form {
                 console.warn(e);
             });
         } else {
-            console.log(this.props);
+            console.log(this.state);
         }
     };
 
+    renderError = () => {
+        if(this.state.errcount || this.state.failure) {
+            const errmsg = this.state.failure || Object.values(this.state.errmsgs).find(v=>v)
+            console.log(`error: ${errmsg}`)
+            return <div className="error">{errmsg}</div>
+        }
+    };
+
+    render() {
+        return (
+            <div class="container">
+                <form {...this.props} onSubmit={this.handleSubmit} ref={fm => {this.form=fm}} >
+                </form>
+            </div>
+        )
+    }
 }
 
-export default withRouter(LoginForm);
+export default Form;

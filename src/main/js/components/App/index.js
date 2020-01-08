@@ -11,6 +11,7 @@ import Login from './../Login'
 import Registration from "./../Registration";
 import Index from "./../Index"
 import Competition from "./../Competition";
+import {connect} from 'react-redux';
 
 import { Layout, notification } from 'antd';
 import {getCurrentUser} from "./../../util/APIUtils";
@@ -20,17 +21,13 @@ import {
     withRouter,
     Switch
 } from 'react-router-dom';
+import userReducer from "../../reducers/user";
 
 const { Content } = Layout;
 
 class Main extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            currentUser: null,
-            isAuthenticated: false,
-            isLoading: false
-        };
         this.handleLogout = this.handleLogout.bind(this);
         this.loadCurrentUser = this.loadCurrentUser.bind(this);
         this.handleLogin = this.handleLogin.bind(this);
@@ -43,22 +40,14 @@ class Main extends React.Component {
     }
 
     loadCurrentUser() {
-        this.setState({
-            isLoading: true,
-            isAuthenticated: true,
-        });
+        this.props.loginAuth();
+        console.log("authing...")
         getCurrentUser()
             .then(response => {
-                this.setState({
-                    currentUser: response,
-                    isAuthenticated: true,
-                    isLoading: false
-                });
+                this.props.login(response)
             }).catch(error => {
-            this.setState({
-                isLoading: false
+                this.props.loginFail(error)
             });
-        });
     }
 
     componentDidMount() {
@@ -66,14 +55,15 @@ class Main extends React.Component {
     }
 
     handleLogin() {
-        notification.success({
-            message: 'Gate',
-            description: 'Login succeed!!!!'
-        });
 
         this.props.history.push("/");
 
         this.loadCurrentUser();
+
+        notification.success({
+            message: 'Gate',
+            description: 'Login succeed!!!!'
+        });
     }
 
     handleLogout(redirectTo="/", notificationType="success", description="You're successfully logged out.") {
@@ -81,10 +71,7 @@ class Main extends React.Component {
 
         this.props.history.push(redirectTo);
 
-        this.setState({
-            currentUser: null,
-            isAuthenticated: false
-        });
+        this.props.logout();
 
         notification[notificationType]({
             message: 'Polling App',
@@ -93,15 +80,14 @@ class Main extends React.Component {
     }
 
     render() {
-        if(this.state.isLoading) {
+        if(this.props.isLoading) {
             return <p>loading..</p>
         }
 
+        // TODO check where state is changed internally (all ok except HEADER)
         return (
             <Layout className="app-container">
-                <Header isAuthenticated={this.state.isAuthenticated}
-                        currentUser={this.state.currentUser}
-                        handleLogin={this.handleLogin}
+                <Header handleLogin={this.handleLogin}
                         handleLogout={this.handleLogout}/>
                 <Switch>
                     <Route exact path='/' component={Index}/>
@@ -109,11 +95,35 @@ class Main extends React.Component {
                     <Route path='/competitions' component={Competitions}/>
                     <Route path="/login"
                            render={(props) => <Login handleLogin={this.handleLogin} {...props} />}/>
-                    <Route path='/registration' component={Registration}/>
+                    <Route path='/registration' render={(props) => <Registration {...props}/>}/>
                 </Switch>
             </Layout>
         );
     }
 }
 
-export default withRouter(Main);
+function mapStateToProps(state) {
+    const tmp = state.userReducer;
+
+    return {
+        error: tmp.error,
+        isLoading: tmp.isLoading,
+        isAuthenticated: tmp.isAuthenticated,
+        currentUser: tmp.currentUser,
+        loading: tmp.componentIsLoading
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        login: (user) => dispatch({type: 'USER_AUTH', user}),
+        loginFail: (err) => dispatch({type: 'USER_FAIL', err}),
+        loginAuth: () => dispatch({type: 'USER_FETCHING'}),
+        logout: () => dispatch({type:'USER_ANONYMOUS'}),
+        loading: () => dispatch({type:'COMPONENT_LOADING'}),
+        loaded: () => dispatch({type: 'COMPONENT_LOADED'})
+    }
+
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Main));

@@ -8,6 +8,7 @@ import {
 } from 'react-router-dom';
 
 import './index.css'
+import {connect} from "react-redux";
 
 class Header extends React.Component {
     constructor(props) {
@@ -53,14 +54,35 @@ class Header extends React.Component {
                         <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"/>
                         <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                     </form>
-                    <LoginRegisterButton isAuthenticated={this.props.isAuthenticated}
-                                         currentUser={this.props.currentUser}
-                                         handleLogout={this.props.handleLogout}
-                    />
+                    <LoginRegisterButton handleLogout={this.props.handleLogout}/>
                 </div>
             </nav>
         );
     }
 }
 
-export default withRouter(Header);
+function mapStateToProps(state) {
+    const tmp = state.userReducer;
+
+    return {
+        error: tmp.error,
+        isLoading: tmp.isLoading,
+        isAuthenticated: tmp.isAuthenticated,
+        currentUser: tmp.currentUser,
+        loading: tmp.componentIsLoading
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        login: (user) => dispatch({type: 'USER_AUTH', user}),
+        loginFail: (err) => dispatch({type: 'USER_FAIL', err}),
+        loginAuth: () => dispatch({type: 'USER_FETCHING'}),
+        logout: () => dispatch({type:'USER_ANONYMOUS'}),
+        loading: () => dispatch({type:'COMPONENT_LOADING'}),
+        loaded: () => dispatch({type: 'COMPONENT_LOADED'})
+    }
+
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Header));
