@@ -51,3 +51,14 @@ export function loadContests() {
         method: 'GET'
     });
 }
+
+export function loadProblemsFromContest(problemId) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: "/api/contests/" + problemId,
+        method: 'GET'
+    });
+}

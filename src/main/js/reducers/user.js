@@ -5,6 +5,7 @@ const initialState = {
     currentUser: null,
     isAuthenticated: false,
     history: null,
+    componentIsLoading: false
 }
 
 const userReducer = (state = initialState, action) => {
@@ -47,6 +48,16 @@ const userReducer = (state = initialState, action) => {
               ...state,
               isLoading: false,
               error: action.payload
+            };
+        case 'COMPONENT_LOADING':
+            return {
+                ...state,
+                componentIsLoading: true
+            };
+        case 'COMPONENT_LOADED':
+            return {
+                ...state,
+                componentIsLoading: false
             };
         default:
             console.warn("default state reached")

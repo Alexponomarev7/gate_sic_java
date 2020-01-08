@@ -40,7 +40,7 @@ class Main extends React.Component {
     }
 
     loadCurrentUser() {
-        this.props.loginAuth()
+        this.props.loginAuth();
         console.log("authing...")
         getCurrentUser()
             .then(response => {
@@ -71,7 +71,7 @@ class Main extends React.Component {
 
         this.props.history.push(redirectTo);
 
-        this.props.logout()
+        this.props.logout();
 
         notification[notificationType]({
             message: 'Polling App',
@@ -87,9 +87,7 @@ class Main extends React.Component {
         // TODO check where state is changed internally (all ok except HEADER)
         return (
             <Layout className="app-container">
-                <Header isAuthenticated={this.props.isAuthenticated}
-                        currentUser={this.props.currentUser}
-                        handleLogin={this.handleLogin}
+                <Header handleLogin={this.handleLogin}
                         handleLogout={this.handleLogout}/>
                 <Switch>
                     <Route exact path='/' component={Index}/>
@@ -105,13 +103,14 @@ class Main extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const tmp = state.userReducer
+    const tmp = state.userReducer;
 
     return {
         error: tmp.error,
         isLoading: tmp.isLoading,
         isAuthenticated: tmp.isAuthenticated,
-        currentUser: tmp.currentUser
+        currentUser: tmp.currentUser,
+        loading: tmp.componentIsLoading
     }
 }
 
@@ -121,6 +120,8 @@ function mapDispatchToProps(dispatch) {
         loginFail: (err) => dispatch({type: 'USER_FAIL', err}),
         loginAuth: () => dispatch({type: 'USER_FETCHING'}),
         logout: () => dispatch({type:'USER_ANONYMOUS'}),
+        loading: () => dispatch({type:'COMPONENT_LOADING'}),
+        loaded: () => dispatch({type: 'COMPONENT_LOADED'})
     }
 
 }
