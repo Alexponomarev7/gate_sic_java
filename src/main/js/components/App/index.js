@@ -15,6 +15,8 @@ import {connect} from 'react-redux';
 import AdminApp from './../AdminApp';
 
 import { Layout, notification } from 'antd';
+import 'antd/dist/antd.css';
+
 import {getCurrentUser} from "./../../util/APIUtils";
 import {ACCESS_TOKEN} from "./../../constants";
 import {
@@ -63,7 +65,7 @@ class Main extends React.Component {
 
         notification.success({
             message: 'Gate',
-            description: 'Login succeed!!!!'
+            description: 'Login succeed!'
         });
     }
 
@@ -75,7 +77,7 @@ class Main extends React.Component {
         this.props.logout();
 
         notification[notificationType]({
-            message: 'Polling App',
+            message: 'Gate',
             description: description,
         });
     }
@@ -86,22 +88,22 @@ class Main extends React.Component {
         }
 
         // TODO check where state is changed internally (all ok except HEADER)
+        //                     <Layout className="app-container">
         return (
             <Switch>
                 <Route path='/admin' component={AdminApp}/>
+
                 <Route path='/'>
-                    <Layout className="app-container">
-                        <Header handleLogin={this.handleLogin}
-                                handleLogout={this.handleLogout}/>
-                        <Switch>
-                            <Route exact path='/' component={Index}/>
-                            <Route path='/competitions/:number' component={Competition}/>
-                            <Route path='/competitions' component={Competitions}/>
-                            <Route path="/login"
-                                   render={(props) => <Login handleLogin={this.handleLogin} {...props} />}/>
-                            <Route path='/registration' render={(props) => <Registration {...props}/>}/>
-                        </Switch>
-                    </Layout>
+                    <Header handleLogin={this.handleLogin}
+                            handleLogout={this.handleLogout}/>
+                    <Switch>
+                        <Route exact path='/' component={Index}/>
+                        <Route path='/competitions/:number' component={Competition}/>
+                        <Route path='/competitions' component={Competitions}/>
+                        <Route path="/login"
+                               render={(props) => <Login handleLogin={this.handleLogin} {...props} />}/>
+                        <Route path='/registration' render={(props) => <Registration {...props}/>}/>
+                    </Switch>
                 </Route>
             </Switch>
         );

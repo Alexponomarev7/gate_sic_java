@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import Form from './../Form'
+
 import {notification} from 'antd'
+import 'antd/dist/antd.css';
+
 import {ACCESS_TOKEN} from "../../constants";
 import {
     Route,
