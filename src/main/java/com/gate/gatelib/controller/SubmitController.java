@@ -124,6 +124,6 @@ public class SubmitController {
                 .fromCurrentContextPath().path("/submissions/{submissionId}")
                 .buildAndExpand(result.getId()).toUri();
 
-        return ResponseEntity.created(location).body("Submission accepted");
+        return ResponseEntity.created(location).body("");
     }
 }
