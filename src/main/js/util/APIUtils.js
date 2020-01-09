@@ -102,3 +102,14 @@ export function loadAdminContestSubmissions(contestId) {
         method: 'GET'
     });
 }
+
+export function loadSubmission(submissionId) {
+    if (!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: "/api/admin/submissions/" + submissionId,
+        method: 'GET'
+    });
+}

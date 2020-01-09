@@ -12,7 +12,7 @@ import java.util.Optional;
 
 
 @RestController
-@RequestMapping(value = "/submissions", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/admin/submissions", produces = MediaType.APPLICATION_JSON_VALUE)
 public class SubmissionController {
     private final SubmissionDao submissionDao;
 

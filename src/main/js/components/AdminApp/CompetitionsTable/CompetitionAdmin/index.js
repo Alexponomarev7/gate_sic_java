@@ -18,10 +18,10 @@ class SubmissionElementAdmin extends React.Component {
                 <td>{Date(this.props.submission.sendTS)}</td>
                 <td>{this.props.submission.lang}</td>
                 <td>
-                    <a href={'/submissions/' + this.props.submission.id}
+                    <Link to={'/admin/submissions/' + this.props.submission.id}
                        className={'btn btn-outline-primary my-2 my-sm-0'}>
                         Просмотреть
-                    </a>
+                    </Link>
                 </td>
             </tr>
         );
