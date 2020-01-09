@@ -4,6 +4,7 @@ const fs  = require('fs');
 const lessToJs = require('less-vars-to-js');
 const themeVariables = lessToJs(fs.readFileSync(path.join(__dirname, './ant-theme-vars.less'), 'utf8'));
 
+
 module.exports = {
     entry: './src/main/js/index.js',
     devtool: 'sourcemaps',

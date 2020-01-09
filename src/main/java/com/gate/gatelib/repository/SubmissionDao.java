@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface SubmissionDao extends JpaRepository<Submission, Integer> {
+public interface SubmissionDao extends JpaRepository<Submission, Long> {
     List<Submission> findAllByProblemSetOrderBySendTSDesc(ProblemSet problemSet);
 }

@@ -13,6 +13,8 @@ import Index from "./../Index"
 import Competition from "./../Competition";
 import {connect} from 'react-redux';
 import AdminApp from './../AdminApp';
+import SubmissionAdmin from '../AdminApp/SubmissionAdmin'
+import CompetitionAdmin from './../AdminApp/CompetitionsTable/CompetitionAdmin';
 
 import { Layout, notification } from 'antd';
 import 'antd/dist/antd.css';
@@ -91,7 +93,13 @@ class Main extends React.Component {
         //                     <Layout className="app-container">
         return (
             <Switch>
-                <Route path='/admin' component={AdminApp}/>
+                <Route path='/admin'>
+                    <Switch>
+                        <Route exact path='/admin' component={AdminApp}/>
+                        <Route path='/admin/competitions/:number' component={CompetitionAdmin}/>
+                        <Route path='/admin/submissions/:number' component={SubmissionAdmin}/>
+                    </Switch>
+                </Route>
 
                 <Route path='/'>
                     <Header handleLogin={this.handleLogin}
