@@ -88,12 +88,5 @@ export function uploadSubmit(file, url) {
         config: { headers: {
                 "Content-Type": "multipart/form-data",
             } }
-    }).then(response =>
-        response.json().then(json => {
-            if(!response.ok) {
-                return Promise.reject(json);
-            }
-            return json;
-        })
-    );
+    });
 }

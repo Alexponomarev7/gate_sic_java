@@ -1,61 +1,92 @@
 import { Upload, Button, Icon } from 'antd';
 import React from 'react';
 import {uploadSubmit} from '../../../util/APIUtils';
+import {notification} from 'antd'
 
 class SubmitUploader extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            fileList: []
-        };
-    }
+    state = {
+        fileList: [],
+        uploading: false,
+    };
 
-    handleChange = info => {
-        console.log(info);
-        let fileList = [...info.fileList];
-
-        fileList = fileList.slice(-1);
-
-        fileList = fileList.map(file => {
-            if (file.response) {
-                file.url = file.response.url;
-            }
-            return file;
+    handleUpload = () => {
+        const { fileList } = this.state;
+        const formData = new FormData();
+        fileList.forEach(file => {
+            formData.append('files[]', file);
         });
 
-        this.setState({ fileList });
-    };
+        this.setState({
+            uploading: true,
+        });
 
-    customRequest = ({onSuccess, onError, file, data}) => {
-        let response = uploadSubmit(file, this.props.uploadUrl);
-        console.log(file);
-        console.log(data);
-        let reader = new FileReader();
-        console.log(typeof file);
-        reader.readAsText(file);
-        console.log(reader.result);
-        if (!response.ok) {
-            onError();
-        } else {
-            onSuccess(response, file);
-        }
+        uploadSubmit(fileList[0], this.props.uploadUrl).then(
+            response => {
+                console.log(response);
+                if (response.status === 201) {
+                    this.setState({
+                        fileList: [],
+                        uploading: false,
+                    });
+                    notification.success({
+                        message: 'Gate',
+                        description: 'upload successfully.'
+                    });
+                } else {
+                    this.setState({
+                        uploading: false,
+                    });
+                    notification.error({
+                        message: 'Gate',
+                        description: response.statusText
+                    });
+                }
+            }
+        )
     };
-
 
     render() {
+        const { uploading, fileList } = this.state;
         const props = {
-            customRequest: this.customRequest,
-            onChange: this.handleChange,
-            multiple: false,
+            onRemove: file => {
+                this.setState(state => {
+                    const index = state.fileList.indexOf(file);
+                    const newFileList = state.fileList.slice();
+                    newFileList.splice(index, 1);
+                    return {
+                        fileList: newFileList,
+                    };
+                });
+            },
+            beforeUpload: file => {
+                this.setState(state => ({
+                    fileList: [...state.fileList, file],
+                }));
+                return false;
+            },
+            fileList,
         };
+
         return (
-            <Upload {...props} fileList={this.state.fileList}>
-                <Button>
-                    <Icon type="upload" /> Upload
+            <div>
+                <Upload {...props}>
+                    <Button>
+                        <Icon type="upload" /> Select File
+                    </Button>
+                </Upload>
+                <Button
+                    type="primary"
+                    onClick={this.handleUpload}
+                    disabled={fileList.length === 0}
+                    loading={uploading}
+                    style={{ marginTop: 16 }}
+                >
+                    {uploading ? 'Uploading' : 'Start Upload'}
                 </Button>
-            </Upload>
+            </div>
         );
     }
 }
+
 
 export default SubmitUploader;
