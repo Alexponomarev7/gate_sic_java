@@ -2,7 +2,11 @@ package com.gate.gatelib.controller;
 
 import com.gate.gatelib.config.CurrentUser;
 import com.gate.gatelib.config.UserPrincipal;
-import com.gate.gatelib.models.*;
+import com.gate.gatelib.models.Group;
+import com.gate.gatelib.models.ProblemSet;
+import com.gate.gatelib.models.Problem;
+import com.gate.gatelib.models.Submission;
+import com.gate.gatelib.models.User;
 import com.gate.gatelib.repository.ProblemDao;
 import com.gate.gatelib.repository.ProblemSetDao;
 import com.gate.gatelib.repository.SubmissionDao;
@@ -14,7 +18,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.Optional;
+import java.util.List;
 
 @RestController
 public class ProblemSetController {
@@ -44,11 +53,12 @@ public class ProblemSetController {
 
     @GetMapping(value="/api/contests")
     @PreAuthorize("hasRole('USER')")
-    public Set<ProblemSet> FindContests(@CurrentUser UserPrincipal currentUser) {
+    public Set<ProblemSet> findContests(@CurrentUser UserPrincipal currentUser) {
         User u = userDao.findByUsername(currentUser.getUsername());
         if (u == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "user not found");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found.");
         }
+        // TODO: do it on sql
         Set<ProblemSet> set = new HashSet<>();
         for (Group g : u.getGroups()) {
             set.addAll(g.getSets());
@@ -90,28 +100,36 @@ public class ProblemSetController {
 
     @GetMapping(value="/api/contests/{contestId}")
     @PreAuthorize("hasRole('USER')")
-    public List<Problem> loadContest(@CurrentUser UserPrincipal currentUser,
-                                     @PathVariable Long contestId) {
-        User u = userDao.findByUsername(currentUser.getUsername());
+    public List<Problem> loadContest(@PathVariable Long contestId,
+                                     @CurrentUser UserPrincipal currentUser) {
+        Optional<User> maybeUser = userDao.findById(currentUser.getId());
 
-        if (u == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "user not found");
+        if (!maybeUser.isPresent()) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "User not found."
+            );
         }
 
-        Optional<ProblemSet> problemSet = problemSetDao.findById(contestId);
-
-        if (!problemSet.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "contest not found");
+        Optional<ProblemSet> maybeProblemSet = problemSetDao.findById(contestId);
+        if (!maybeProblemSet.isPresent()) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Contest not found"
+            );
         }
+        // TODO: redundant check? private contests and public?
+        checkAccessibility(maybeUser.get(), maybeProblemSet.get());
 
-        ProblemSet existedProblemSet = problemSet.get();
-        Set<Group> intersection = new HashSet<Group>(existedProblemSet.getGroups());
-        intersection.retainAll(u.getGroups());
+        return maybeProblemSet.get().getProblems();
+    }
+
+    private void checkAccessibility(User user, ProblemSet problemSet) {
+        Set<Group> intersection = new HashSet<>(problemSet.getGroups());
+        intersection.retainAll(user.getGroups());
 
         if (intersection.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "not access");
         }
-
-        return existedProblemSet.getProblems();
     }
 }

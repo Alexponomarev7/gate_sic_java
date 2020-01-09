@@ -14,13 +14,13 @@ public class Submission {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     // TODO: ENUM?
     private String status;
 
-    // TODO: specify what it is
-    private String contentsUrl;
+    // TODO: just string as content?
+    private String contents;
 
     // TODO: ENUM?
     private String lang;
@@ -50,17 +50,17 @@ public class Submission {
 
     public void setUser(User user) { this.user = user; }
 
-    public int getId() { return id; }
+    public Long getId() { return id; }
 
-    public void setId(Integer id) { this.id = id; }
+    public void setId(Long id) { this.id = id; }
 
     public String getStatus() { return status; }
 
     public void setStatus(String status) { this.status = status; }
 
-    public String getContentsUrl() { return contentsUrl; }
+    public String getContents() { return contents; }
 
-    public void setContentsUrl(String contentsUrl) { this.contentsUrl = contentsUrl; }
+    public void setContents(String contents) { this.contents = contents; }
 
     public String getLang() { return lang; }
 

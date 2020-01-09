@@ -25,7 +25,7 @@ const request = (options) => {
 
 export function getUserProfile(username) {
     return request({
-        url: API_BASE_URL + "/us!!!ers/" + username,
+        url: "/users/" + username,
         method: 'GET'
     });
 }
@@ -52,13 +52,31 @@ export function loadContests() {
     });
 }
 
-export function loadProblemsFromContest(problemId) {
+export function loadProblemsFromContest(contestId) {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
     }
 
     return request({
-        url: "/api/contests/" + problemId,
+        url: "/api/contests/" + contestId.toString(),
         method: 'GET'
+    });
+}
+
+export function uploadSubmit(file, url) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    let json = {
+        language: 'C++',
+        code: file.toString(),
+        jwtToken: localStorage.getItem(ACCESS_TOKEN)
+    };
+
+    return request({
+        url: url,
+        method: 'POST',
+        body: JSON.stringify(json)
     });
 }

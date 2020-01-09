@@ -12,7 +12,7 @@ public class Group {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     private String name;
 
@@ -48,11 +48,11 @@ public class Group {
 
     public void addSet(ProblemSet set) { this.sets.add(set); }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
