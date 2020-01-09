@@ -55,6 +55,7 @@ public class ProblemSetController {
     public List<Problem> loadContest(@PathVariable Integer contestId,
                                      @CurrentUser UserPrincipal currentUser) {
         Optional<User> maybeUser = userDao.findById(currentUser.getId());
+
         if (!maybeUser.isPresent()) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST,
@@ -76,16 +77,11 @@ public class ProblemSetController {
     }
 
     private void checkAccessibility(User user, ProblemSet problemSet) {
-        Set<Group> groupSet = problemSet.getGroups();
-        List<Group> userGroups = user.getGroups();
-        for (Group group : userGroups) {
-            if (groupSet.contains(group)) {
-                return;
-            }
+        Set<Group> intersection = new HashSet<>(problemSet.getGroups());
+        intersection.retainAll(user.getGroups());
+
+        if (intersection.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "not access");
         }
-        throw new ResponseStatusException(
-                HttpStatus.BAD_REQUEST,
-                "User does not have access to this contest"
-        );
     }
 }
