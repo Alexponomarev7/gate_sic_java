@@ -1,9 +1,10 @@
 import { API_BASE_URL, POLL_LIST_SIZE, ACCESS_TOKEN } from '../constants';
+import axios from 'axios';
 
-const request = (options) => {
-    const headers = new Headers({
-        'Content-Type': 'application/json',
-    })
+//https://habr.com/ru/company/ruvds/blog/477286/
+
+const request = (options, content_type='application/json') => {
+    const headers = new Headers({'Content-Type': content_type});
 
     if(localStorage.getItem(ACCESS_TOKEN)) {
         headers.append('Authorization', 'Bearer ' + localStorage.getItem(ACCESS_TOKEN))
@@ -70,13 +71,22 @@ export function uploadSubmit(file, url) {
 
     let json = {
         language: 'C++',
-        code: file.toString(),
         jwtToken: localStorage.getItem(ACCESS_TOKEN)
     };
 
-    return request({
+    const formData  = new FormData();
+    formData.append('file', file);
+    formData.append('payload', new Blob([JSON.stringify(json)],
+        {type: "application/json"})
+    );
+
+    axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem(ACCESS_TOKEN)
+    return axios({
         url: url,
         method: 'POST',
-        body: JSON.stringify(json)
+        data: formData,
+        config: { headers: {
+                "Content-Type": "multipart/form-data",
+            } }
     });
 }
