@@ -15,8 +15,8 @@ public class Submission {
     // TODO: ENUM?
     private String status;
 
-    // TODO: specify what it is
-    private String contentsUrl;
+    // TODO: just string as content?
+    private String contents;
 
     // TODO: ENUM?
     private String lang;
@@ -51,9 +51,9 @@ public class Submission {
 
     public void setStatus(String status) { this.status = status; }
 
-    public String getContentsUrl() { return contentsUrl; }
+    public String getContents() { return contents; }
 
-    public void setContentsUrl(String contentsUrl) { this.contentsUrl = contentsUrl; }
+    public void setContents(String contents) { this.contents = contents; }
 
     public String getLang() { return lang; }
 
