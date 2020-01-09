@@ -61,7 +61,6 @@ const userReducer = (state = initialState, action) => {
                 componentIsLoading: false
             };
         default:
-            console.warn("default state reached", action)
             return state;
     }
 };

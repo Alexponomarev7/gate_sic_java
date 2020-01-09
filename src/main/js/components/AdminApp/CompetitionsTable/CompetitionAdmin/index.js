@@ -2,6 +2,7 @@ import React from 'react';
 
 import {Link, withRouter} from 'react-router-dom';
 import {loadAdminContestSubmissions} from "../../../../util/APIUtils";
+import {connect} from 'react-redux';
 
 
 class SubmissionElementAdmin extends React.Component {
@@ -32,18 +33,23 @@ class CompetitionAdmin extends React.Component {
     constructor(props) {
         super(props);
         this.contestId = this.props.match.params.number;
-        self.submissions = [];
     }
 
-    componentDidMount() {
+    getSubmissions() {
         loadAdminContestSubmissions(this.contestId).then(response => {
-            self.submissions = response.map(submission =>
-                <SubmissionElementAdmin submission={submission} contestId={this.contestId} />);
-            this.forceUpdate();
+            if (response.length === 0) {
+                return;
+            }
+            console.log(response);
+            this.props.setSubmissions(response.map(submission =>
+                <SubmissionElementAdmin submission={submission} contestId={this.contestId} />));
         });
     }
 
     render() {
+        if (!this.props.submissions) {
+            this.getSubmissions();
+        }
         return (
             <div class='container'>
                 <div>
@@ -61,7 +67,7 @@ class CompetitionAdmin extends React.Component {
                     </tr>
                     </thead>
                     <tbody>
-                    {self.submissions}
+                    {this.props.submissions || "no submissions found"}
                     </tbody>
                 </table>
             </div>
@@ -69,4 +75,17 @@ class CompetitionAdmin extends React.Component {
     }
 }
 
-export default withRouter(CompetitionAdmin);
+function mapToStateProps(state) {
+    const {adminReducer} = state;
+    return {
+        submissions: adminReducer.submissions,
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        setSubmissions: (responce) => dispatch({type: 'ADD_SUBMISSIONS', payload: responce})
+    }
+}
+
+export default withRouter(connect(mapToStateProps, mapDispatchToProps)(CompetitionAdmin));

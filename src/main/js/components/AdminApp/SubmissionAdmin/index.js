@@ -7,25 +7,32 @@ require('codemirror/mode/xml/xml');
 require('codemirror/mode/javascript/javascript');
 require('codemirror/mode/python/python');
 
+import {connect} from 'react-redux';
+
+
 class SubmissionAdmin extends React.Component {
     constructor(props) {
         super(props);
         this.submissionId = this.props.match.params.number;
-        this.text = '';
     }
 
-    componentDidMount() {
+    getCode() {
         loadSubmission(this.submissionId).then(response => {
-            this.text = response.contents;
-            this.forceUpdate();
+            if (!response.contents) {
+                return;
+            }
+            this.props.setText(response.contents);
         });
     }
 
     render() {
+        if (!this.props.text) {
+            this.getCode();
+        }
         return (
             <div class='container'>
                 <CodeMirror
-                    value={this.text.toString()}
+                    value={this.props.text || "no code found"}
                     options={{
                         mode: 'python',
                         theme: 'material',
@@ -39,4 +46,18 @@ class SubmissionAdmin extends React.Component {
     }
 }
 
-export default SubmissionAdmin;
+function mapToStateProps(state) {
+    const {adminReducer} = state;
+    return {
+        text: adminReducer.text,
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        setText: (text) => dispatch({type: 'ADD_SUBTEXT', payload: text})
+    }
+}
+
+
+export default connect(mapToStateProps, mapDispatchToProps)(SubmissionAdmin);
