@@ -3,7 +3,8 @@ import React from "react";
 const adminState = {
     competitions: null,
     submissions: null,
-    text: null,
+    curSub: null,
+    curRes: null,
 }
 
 
@@ -19,10 +20,15 @@ const adminReducer = (state=adminState, action) => {
                 ...state,
                 submissions: action.payload
             }
-        case 'ADD_SUBTEXT':
+        case 'ADD_SUBMISSION':
             return {
                 ...state,
-                text: action.payload
+                curSub: action.payload
+            }
+        case 'ADD_RESOLUTION':
+            return {
+                ...state,
+                curRes: action.payload
             }
         default:
             return state
