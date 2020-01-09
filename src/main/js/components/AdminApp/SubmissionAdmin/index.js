@@ -16,19 +16,13 @@ class SubmissionAdmin extends React.Component {
         this.submissionId = this.props.match.params.number;
     }
 
-    getCode() {
+    componentDidMount() {
         loadSubmission(this.submissionId).then(response => {
-            if (!response.contents) {
-                return;
-            }
             this.props.setText(response.contents);
         });
     }
 
     render() {
-        if (!this.props.text) {
-            this.getCode();
-        }
         return (
             <div class='container'>
                 <CodeMirror

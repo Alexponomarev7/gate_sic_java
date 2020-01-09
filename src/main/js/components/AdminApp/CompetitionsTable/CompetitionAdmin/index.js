@@ -35,21 +35,14 @@ class CompetitionAdmin extends React.Component {
         this.contestId = this.props.match.params.number;
     }
 
-    getSubmissions() {
+    componentDidMount() {
         loadAdminContestSubmissions(this.contestId).then(response => {
-            if (response.length === 0) {
-                return;
-            }
-            console.log(response);
             this.props.setSubmissions(response.map(submission =>
                 <SubmissionElementAdmin submission={submission} contestId={this.contestId} />));
         });
     }
 
     render() {
-        if (!this.props.submissions) {
-            this.getSubmissions();
-        }
         return (
             <div class='container'>
                 <div>

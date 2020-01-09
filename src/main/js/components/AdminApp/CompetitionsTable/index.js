@@ -30,22 +30,15 @@ class CompetitionsTable extends React.Component {
         super(props);
     }
 
-    getContests() {
+    componentDidMount() {
         loadAdminContests()
             .then((responce) => {
-                if (responce.length === 0) {
-                    // to forbid infinite recursion (state changed, reloaded, state changed...)
-                    return
-                }
                 this.props.setCompetitions(responce
                     .map(competition => <CompetitionListElement competition={competition}/>))
             })
     }
 
     render() {
-        if (!this.props.competitions) {
-            this.getContests();
-        }
         return (
             <table className="table table-striped">
                 <thead>
