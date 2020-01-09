@@ -4,6 +4,7 @@ import {
     withRouter,
     Switch
 } from 'react-router-dom';
+import CompetitionsTable from "./CompetitionsTable";
 
 class AdminApp extends React.Component {
     constructor(props) {
@@ -12,7 +13,9 @@ class AdminApp extends React.Component {
 
     render() {
         return (
-            <div>Hello my friend!</div>
+            <div>
+                <CompetitionsTable />
+            </div>
         )
     }
 }

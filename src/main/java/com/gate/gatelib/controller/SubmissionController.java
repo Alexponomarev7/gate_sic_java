@@ -4,6 +4,7 @@ import com.gate.gatelib.models.*;
 import com.gate.gatelib.repository.SubmissionDao;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -18,7 +19,8 @@ public class SubmissionController {
     SubmissionController(SubmissionDao submissionDao) { this.submissionDao = submissionDao; }
 
     @GetMapping("/{submissionId}")
-    public Submission getSubmissionById(@PathVariable Integer submissionId) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public Submission getSubmissionById(@PathVariable Long submissionId) {
         Optional<Submission> maybeSubmission = submissionDao.findById(submissionId);
         if (!maybeSubmission.isPresent()) {
             throw new ResponseStatusException(

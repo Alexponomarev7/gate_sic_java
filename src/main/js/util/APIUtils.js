@@ -80,3 +80,25 @@ export function uploadSubmit(file, url) {
         body: JSON.stringify(json)
     });
 }
+
+export function loadAdminContests() {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: "/api/admin/contests",
+        method: 'GET'
+    });
+}
+
+export function loadAdminContestSubmissions(contestId) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: "/api/admin/contest/" + contestId + "/submissions",
+        method: 'GET'
+    });
+}
