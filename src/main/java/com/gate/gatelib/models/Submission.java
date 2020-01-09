@@ -10,7 +10,7 @@ public class Submission {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     // TODO: ENUM?
     private String status;
@@ -43,9 +43,9 @@ public class Submission {
 
     public void setUser(User user) { this.user = user; }
 
-    public int getId() { return id; }
+    public Long getId() { return id; }
 
-    public void setId(Integer id) { this.id = id; }
+    public void setId(Long id) { this.id = id; }
 
     public String getStatus() { return status; }
 

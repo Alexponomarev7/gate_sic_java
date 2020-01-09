@@ -17,7 +17,7 @@ class TaskListElement extends React.Component {
             <tr>
                 <th scope="row">{this.props.task.id}</th>
                 <td>{this.props.task.name}</td>
-                <td> Here will be uploaders </td>
+                <td> <SubmitUploader uploadUrl={this.uploadUrl} /> </td>
             </tr>
         );
     }
