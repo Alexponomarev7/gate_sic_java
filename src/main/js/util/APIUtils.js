@@ -42,6 +42,17 @@ export function getCurrentUser() {
     });
 }
 
+export function setSubmissionStatus(body) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+    return request({
+        url: "/api/admin/submissions/resolve",
+        method: 'POST',
+        body: body
+    });
+}
+
 export function loadContests() {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");

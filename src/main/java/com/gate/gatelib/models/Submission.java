@@ -23,6 +23,8 @@ public class Submission {
     // TODO: ENUM?
     private String status;
 
+    private String resolution;
+
     // TODO: just string as content?
     // TODO: maybe is so heavy to store in DB?
     @Size(max=4*1024*1024) // 4 MB
@@ -81,4 +83,12 @@ public class Submission {
     public Problem getProblem() { return problem; }
 
     public void setProblem(Problem problem) { this.problem = problem; }
+
+    public String getResolution() {
+        return resolution;
+    }
+
+    public void setResolution(String resolution) {
+        this.resolution = resolution;
+    }
 }

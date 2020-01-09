@@ -1,6 +1,8 @@
 import React from 'react'
 import {loadAdminContests} from "../../../util/APIUtils";
 import {Link} from "react-router-dom";
+import {connect} from 'react-redux';
+
 
 class CompetitionListElement extends React.Component {
     constructor(props) {
@@ -26,14 +28,14 @@ class CompetitionListElement extends React.Component {
 class CompetitionsTable extends React.Component {
     constructor(props) {
         super(props);
-        self.competitions = [];
     }
 
     componentDidMount() {
-        loadAdminContests().then(response => {
-            self.competitions = response.map(competition => <CompetitionListElement competition={competition}/>);
-            this.forceUpdate();
-        });
+        loadAdminContests()
+            .then((responce) => {
+                this.props.setCompetitions(responce
+                    .map(competition => <CompetitionListElement competition={competition}/>))
+            })
     }
 
     render() {
@@ -47,11 +49,24 @@ class CompetitionsTable extends React.Component {
                 </tr>
                 </thead>
                 <tbody>
-                {self.competitions}
+                {this.props.competitions || "competitions not found"}
                 </tbody>
             </table>
         )
     }
 }
 
-export default CompetitionsTable;
+function mapToStateProps(state) {
+    const {adminReducer} = state;
+    return {
+        competitions: adminReducer.competitions,
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        setCompetitions: (responce) => dispatch({type: 'ADD_COMPETITIONS', payload: responce})
+    }
+}
+
+export default connect(mapToStateProps, mapDispatchToProps)(CompetitionsTable);
