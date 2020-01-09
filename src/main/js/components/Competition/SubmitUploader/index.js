@@ -28,6 +28,12 @@ class SubmitUploader extends React.Component {
 
     customRequest = ({onSuccess, onError, file, data}) => {
         let response = uploadSubmit(file, this.props.uploadUrl);
+        console.log(file);
+        console.log(data);
+        let reader = new FileReader();
+        console.log(typeof file);
+        reader.readAsText(file);
+        console.log(reader.result);
         if (!response.ok) {
             onError();
         } else {

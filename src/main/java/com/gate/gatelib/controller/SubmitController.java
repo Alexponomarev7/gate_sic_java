@@ -12,11 +12,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.IOException;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -73,11 +78,12 @@ public class SubmitController {
 
 
 
-    @PostMapping("/competitions/{contestId}/problem/{problemId}/submit")
+    @PostMapping(value="/competitions/{contestId}/problem/{problemId}/submit", consumes={"multipart/form-data"})
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> submitProblem(@PathVariable Long contestId, @PathVariable Long problemId,
-                                           @Valid @RequestBody SubmitRequest submitRequest,
-                                           @CurrentUser UserPrincipal currentUser) {
+                                           @Valid @RequestPart("payload") SubmitRequest submitRequest,
+                                           @NotNull @RequestPart("file") MultipartFile file,
+                                           @CurrentUser UserPrincipal currentUser) throws IOException {
         Optional<ProblemSet> maybeProblemSet = problemSetDao.findById(contestId);
         if (!maybeProblemSet.isPresent()) {
             throw new ResponseStatusException(
@@ -113,7 +119,7 @@ public class SubmitController {
         submission.setLang(submitRequest.getLanguage());
 
         submission.setSendTS(new Date());
-        submission.setContents(submitRequest.getCode());
+        submission.setContents(new String(file.getBytes(), StandardCharsets.UTF_8));
 
         // TODO: send for testing instead of OK
         submission.setStatus("OK");
