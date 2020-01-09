@@ -14,7 +14,6 @@ import {
 class LoginForm extends Form {
     constructor(props) {
         super(props);
-        console.log("hi", props);
     }
 
     handleSubmit = (event) => {
@@ -34,9 +33,8 @@ class LoginForm extends Form {
                 if (response.ok) {
                     response.json().then(json => {
                         localStorage.setItem(ACCESS_TOKEN, json.accessToken);
+                        this.props.handleLogin();
                     });
-
-                    this.props.handleLogin();
                 } else {
                     response.json().then(json => {
                         notification.error({

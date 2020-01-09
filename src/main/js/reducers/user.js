@@ -13,13 +13,14 @@ const userReducer = (state = initialState, action) => {
         case 'USER_FETCHING':
             return {
                 ...state,
-                isAuthenticated: true,
+                isAuthenticated: false,
                 isLoading: true
             };
         case 'USER_FAIL':
             return {
                 ...state,
                 isLoading: false,
+                isAuthenticated: false,
             };
         case 'USER_ANONYMOUS':
             return {
@@ -28,7 +29,7 @@ const userReducer = (state = initialState, action) => {
                 isAuthenticated: false,
                 isLoading: false,
                 error: null,
-                data: null,
+                data: null
             };
         case 'USER_AUTH':
             return {
@@ -60,7 +61,7 @@ const userReducer = (state = initialState, action) => {
                 componentIsLoading: false
             };
         default:
-            console.warn("default state reached")
+            console.warn("default state reached", action)
             return state;
     }
 };
