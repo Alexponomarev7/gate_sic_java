@@ -23,65 +23,39 @@ class TaskListElement extends React.Component {
     }
 }
 
-
-class TaskList extends React.Component {
+class Competition extends React.Component {
     constructor(props) {
         super(props);
-        self.tasks = [];
+        this.tasks = [];
+        this.contestId = this.props.match.params.number;
     }
 
     componentDidMount() {
-        loadContest(this.props.contestId).then(response => {
-            self.tasks = response.map(task => <TaskListElement task={task} contestId={this.props.contestId} />);
-            this.forceUpdate();
+        this.props.loading();
+        loadProblemsFromContest(this.contestId).then(response => {
+            self.tasks = response.map(task => <TaskListElement task={task} contestId={this.contestId} />);
+            this.props.loaded();
         });
     }
 
     render() {
         return (
-            <table className="table table-striped">
-                <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Task name</th>
-                    <th scope="col">Some actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                {self.tasks}
-                </tbody>
-            </table>
-        )
-    }
-}
-
-
-class Competition extends React.Component {
-    constructor(props) {
-        super(props);
-        this.problems = [];
-    }
-
-    componentDidMount() {
-        this.props.loading();
-        loadProblemsFromContest(this.props.match.params.number).then(
-            response => {
-                this.problems = response.map(problem =>
-                    <form >
-                        <Problem problem={problem} />
-                    </form>
-                );
-                console.log(response);
-                this.props.loaded();
-            }
-        )
-    }
-
-    render() {
-        return (
-            <div>
-                <div> <h5> Competition {this.props.match.params.number} </h5> </div>
-                <TaskList contestId={this.props.match.params.number} />
+            <div class='container'>
+                <div>
+                    <h5> Competition {this.contestId} </h5>
+                </div>
+                <table className="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Task name</th>
+                        <th scope="col">Some actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {self.tasks}
+                    </tbody>
+                </table>
             </div>
         );
     }
