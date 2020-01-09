@@ -75,7 +75,7 @@ public class SubmitController {
 
     @PostMapping("/competitions/{contestId}/problem/{problemId}/submit")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> submitProblem(@PathVariable Integer contestId, @PathVariable Integer problemId,
+    public ResponseEntity<?> submitProblem(@PathVariable Long contestId, @PathVariable Long problemId,
                                            @Valid @RequestBody SubmitRequest submitRequest,
                                            @CurrentUser UserPrincipal currentUser) {
         Optional<ProblemSet> maybeProblemSet = problemSetDao.findById(contestId);

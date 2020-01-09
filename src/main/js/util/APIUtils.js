@@ -52,7 +52,7 @@ export function loadContests() {
     });
 }
 
-export function loadContest(contestId) {
+export function loadProblemsFromContest(contestId) {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
     }

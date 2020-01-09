@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Form from './../Form'
 import {notification} from 'antd'
 
+
 class RegisterForm extends Form {
     constructor(props) {
         super(props);
@@ -9,7 +10,7 @@ class RegisterForm extends Form {
 
     handleSubmit = (event) => {
         event.preventDefault();
-        if(!this.state.errcount) {
+        if(!this.props.error) {
             const data = new FormData(this.form);
             let object = {};
             data.forEach((value, key) => {object[key] = value});
@@ -28,7 +29,7 @@ class RegisterForm extends Form {
                             description: text
                         });
                     });
-                    // TODO: change screen (without redirect).
+                    // TODO: change screen (without redirect). History is undefined here(no matter what)
                 } else {
                     v.json().then(json => {
                         notification.error({
@@ -46,7 +47,7 @@ class RegisterForm extends Form {
                 console.warn(e);
             });
         } else {
-            console.log(this.state);
+            console.log(this.props);
         }
     };
 

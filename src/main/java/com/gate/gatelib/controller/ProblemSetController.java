@@ -6,6 +6,7 @@ import com.gate.gatelib.models.Group;
 import com.gate.gatelib.models.ProblemSet;
 import com.gate.gatelib.models.Problem;
 import com.gate.gatelib.models.User;
+import com.gate.gatelib.repository.ProblemDao;
 import com.gate.gatelib.repository.ProblemSetDao;
 import com.gate.gatelib.repository.UserDao;
 import com.gate.gatelib.service.UserService;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.Optional;
 import java.util.List;
@@ -23,11 +26,18 @@ import java.util.List;
 @RestController
 public class ProblemSetController {
 
-    private final UserDao userDao;
-    private final ProblemSetDao problemSetDao;
+    @Autowired
+    UserDao userDao;
 
-    ProblemSetController(UserDao userDao, ProblemSetDao problemSetDao) {
+    @Autowired
+    ProblemDao problemDao;
+
+    @Autowired
+    ProblemSetDao problemSetDao;
+
+    ProblemSetController(UserDao userDao, ProblemDao problemDao, ProblemSetDao problemSetDao) {
         this.userDao = userDao;
+        this.problemDao = problemDao;
         this.problemSetDao = problemSetDao;
     }
 
@@ -52,7 +62,7 @@ public class ProblemSetController {
 
     @GetMapping(value="/api/contests/{contestId}")
     @PreAuthorize("hasRole('USER')")
-    public List<Problem> loadContest(@PathVariable Integer contestId,
+    public List<Problem> loadContest(@PathVariable Long contestId,
                                      @CurrentUser UserPrincipal currentUser) {
         Optional<User> maybeUser = userDao.findById(currentUser.getId());
 
