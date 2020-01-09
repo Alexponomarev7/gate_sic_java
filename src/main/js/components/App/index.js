@@ -51,6 +51,7 @@ class Main extends React.Component {
             .then(response => {
                 this.props.login(response)
             }).catch(error => {
+                console.warn(error)
                 this.props.loginFail(error)
             });
     }
