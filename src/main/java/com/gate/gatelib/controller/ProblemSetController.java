@@ -5,9 +5,11 @@ import com.gate.gatelib.config.UserPrincipal;
 import com.gate.gatelib.models.Group;
 import com.gate.gatelib.models.ProblemSet;
 import com.gate.gatelib.models.Problem;
+import com.gate.gatelib.models.Submission;
 import com.gate.gatelib.models.User;
 import com.gate.gatelib.repository.ProblemDao;
 import com.gate.gatelib.repository.ProblemSetDao;
+import com.gate.gatelib.repository.SubmissionDao;
 import com.gate.gatelib.repository.UserDao;
 import com.gate.gatelib.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,10 +37,15 @@ public class ProblemSetController {
     @Autowired
     ProblemSetDao problemSetDao;
 
-    ProblemSetController(UserDao userDao, ProblemDao problemDao, ProblemSetDao problemSetDao) {
+    @Autowired
+    SubmissionDao submissionDao;
+
+    ProblemSetController(UserDao userDao, ProblemDao problemDao,
+                         ProblemSetDao problemSetDao, SubmissionDao submissionDao) {
         this.userDao = userDao;
         this.problemDao = problemDao;
         this.problemSetDao = problemSetDao;
+        this.submissionDao = submissionDao;
     }
 
     @Autowired
@@ -58,6 +65,37 @@ public class ProblemSetController {
         };
 
         return set;
+    }
+
+    @GetMapping(value="/api/admin/contests")
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<ProblemSet> findContestsAll(@CurrentUser UserPrincipal currentUser) {
+        if (!userDao.existsById(currentUser.getId())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "user not found");
+        }
+        return problemSetDao.findAll();
+    }
+
+    @PostMapping(value="/api/admin/contests")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ProblemSet createProblemSet(@CurrentUser UserPrincipal currentUser,
+                                       @RequestBody ProblemSet problemSet) {
+        return problemSetDao.save(problemSet);
+    }
+
+    @GetMapping(value="/api/admin/contest/{contestId}/submissions")
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<Submission> getSubmissionsForContest(@PathVariable Long contestId,
+                                                     @CurrentUser UserPrincipal currentUser) {
+        if (!userDao.existsById(currentUser.getId())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "user not found");
+        }
+        Optional<ProblemSet> maybeProblemSet = problemSetDao.findById(contestId);
+        if (!maybeProblemSet.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "contest not found");
+        }
+        ProblemSet problemSet = maybeProblemSet.get();
+        return submissionDao.findAllByProblemSetOrderBySendTSDesc(problemSet);
     }
 
     @GetMapping(value="/api/contests/{contestId}")

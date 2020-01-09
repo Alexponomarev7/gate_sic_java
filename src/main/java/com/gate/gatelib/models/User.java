@@ -2,6 +2,7 @@ package com.gate.gatelib.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -19,6 +20,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonProperty
     private String username;
 
     @Size(min=2, message = "Не меньше 5 знаков")
@@ -52,6 +54,7 @@ public class User {
         this.username = name;
     }
 
+    @JsonIgnore
     public String getPassword() {
         return password;
     }
