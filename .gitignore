@@ -39,3 +39,5 @@ node_modules/
 bundle.js
 bundle.js.map
 
+### User-made: maven compiled wrapper ###
+.mvn/wrapper/maven-wrapper.jar
