@@ -134,3 +134,14 @@ export function loadSubmission(submissionId) {
         method: 'GET'
     });
 }
+
+export function loadProblem(problemId) {
+    if (!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: "/api/problems/" + problemId,
+        method: 'GET'
+    });
+}

@@ -11,6 +11,7 @@ import Login from './../Login'
 import Registration from "./../Registration";
 import Index from "./../Index"
 import Competition from "./../Competition";
+import Problem from "./../Competition/Problem"
 import {connect} from 'react-redux';
 import AdminApp from './../AdminApp';
 import SubmissionAdmin from '../AdminApp/SubmissionAdmin'
@@ -107,6 +108,7 @@ class Main extends React.Component {
                             handleLogout={this.handleLogout}/>
                     <Switch>
                         <Route exact path='/' component={Index}/>
+                        <Route path='/competitions/:contestId/tasks/:taskId' component={Problem}/>
                         <Route path='/competitions/:number' component={Competition}/>
                         <Route path='/competitions' component={Competitions}/>
                         <Route path="/login"
