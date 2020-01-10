@@ -3,6 +3,7 @@ import React from 'react';
 import { loadProblemsFromContest } from './../../util/APIUtils'
 import {connect} from "react-redux";
 import SubmitUploader from "./SubmitUploader";
+import { Link } from 'react-router-dom'
 
 
 class TaskListElement extends React.Component {
@@ -16,7 +17,9 @@ class TaskListElement extends React.Component {
         return (
             <tr>
                 <th scope="row">{this.props.task.id}</th>
-                <td>{this.props.task.name}</td>
+                <td><Link to={'/competitions/' +
+                    this.props.contestId + '/tasks/' + this.props.task.id
+                }>{this.props.task.name}</Link></td>
                 <td> <SubmitUploader uploadUrl={this.uploadUrl} /> </td>
             </tr>
         );
