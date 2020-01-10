@@ -63,7 +63,6 @@ public class ProblemController {
         if (!problem.isPresent()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Problem not found.");
         }
-        System.out.println(ProblemsPath + problem.get().getPath() + StatementSuffix);
 
         ProblemResponse response = new ProblemResponse();
         response.setStatement(new String(Files.readAllBytes(
