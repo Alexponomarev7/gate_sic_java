@@ -21,7 +21,8 @@ const inputs = [{
 },{
     type: "submit",
     value: "Submit",
-    className: "btn"
+    className: "btn btn-outline-success",
+    id: "LoginBtn"
 }];
 
 const props = {
@@ -38,7 +39,7 @@ class Login extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="LoginForm">
                 <LoginForm handleLogin={this.props.handleLogin} {...props} />
                 <h4><Link to={"/registration"}>Зарегистрироваться</Link></h4>
             </div>
