@@ -18,7 +18,7 @@ import java.util.List;
  * Считает все метрики по сабмишшнам, отдает табличку по юзерам как джсонину.
  */
 @RestController
-@RequestMapping(value = "/monitor", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/monitor", produces = MediaType.APPLICATION_JSON_VALUE)
 public class MonitorController {
 
     private final ProblemSetDao problemSetDao;
