@@ -1,27 +1,25 @@
 package com.gate.gatelib.monitor;
 
 class UserData {
-    private String userName;
-    private Integer userId;
+    private String username;
+    private Long id;
 
-    UserData(String userName, Integer userId) {
-        this.userName = userName;
-        this.userId = userId;
+    UserData(String userName, Long userId) {
+        this.username = userName;
+        this.id = userId;
     }
 
     public String getUserName() {
-        return userName;
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUserName(String username) { this.username = username; }
+
+    public Long getUserId() {
+        return id;
     }
 
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public void setUserId(Long id) {
+        this.id = id;
     }
 }

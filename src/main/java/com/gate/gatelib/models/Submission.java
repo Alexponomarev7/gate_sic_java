@@ -1,6 +1,14 @@
 package com.gate.gatelib.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.Type;
+import org.springframework.data.util.Lazy;
+
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 
@@ -10,28 +18,37 @@ public class Submission {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     // TODO: ENUM?
     private String status;
 
-    // TODO: specify what it is
-    private String contentsUrl;
+    private String resolution;
+
+    // TODO: just string as content?
+    // TODO: maybe is so heavy to store in DB?
+    @Size(max=4*1024*1024) // 4 MB
+    @Basic(fetch=FetchType.LAZY)
+    @Column(columnDefinition="TEXT")
+    private String contents;
 
     // TODO: ENUM?
     private String lang;
 
     private Date sendTS;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonManagedReference
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "set_id")
     private ProblemSet problemSet;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonManagedReference
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "problem_id")
     private Problem problem;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonManagedReference
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -43,17 +60,17 @@ public class Submission {
 
     public void setUser(User user) { this.user = user; }
 
-    public int getId() { return id; }
+    public Long getId() { return id; }
 
-    public void setId(Integer id) { this.id = id; }
+    public void setId(Long id) { this.id = id; }
 
     public String getStatus() { return status; }
 
     public void setStatus(String status) { this.status = status; }
 
-    public String getContentsUrl() { return contentsUrl; }
+    public String getContents() { return contents; }
 
-    public void setContentsUrl(String contentsUrl) { this.contentsUrl = contentsUrl; }
+    public void setContents(String contents) { this.contents = contents; }
 
     public String getLang() { return lang; }
 
@@ -66,4 +83,12 @@ public class Submission {
     public Problem getProblem() { return problem; }
 
     public void setProblem(Problem problem) { this.problem = problem; }
+
+    public String getResolution() {
+        return resolution;
+    }
+
+    public void setResolution(String resolution) {
+        this.resolution = resolution;
+    }
 }

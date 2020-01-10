@@ -2,9 +2,9 @@ package com.gate.gatelib.monitor;
 
 class TaskData {
     private String taskName;
-    private Integer taskId;
+    private Long taskId;
 
-    TaskData(String taskName, Integer taskId) {
+    TaskData(String taskName, Long taskId) {
         this.taskName = taskName;
         this.taskId = taskId;
     }
@@ -17,11 +17,11 @@ class TaskData {
         this.taskName = taskName;
     }
 
-    public Integer getTaskId() {
+    public Long getTaskId() {
         return taskId;
     }
 
-    public void setTaskId(Integer taskId) {
+    public void setTaskId(Long taskId) {
         this.taskId = taskId;
     }
 }

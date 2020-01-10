@@ -1,6 +1,7 @@
 package com.gate.gatelib.monitor;
 
 import com.gate.gatelib.models.*;
+import com.gate.gatelib.repository.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -23,12 +24,14 @@ public class MonitorController {
     private final ProblemSetDao problemSetDao;
     private final GroupDao groupDao;
     private final SubmissionDao submissionDao;
+    private final ProblemDao problemDao;
 
     MonitorController(ProblemSetDao problemSetDao, GroupDao groupDao,
-                      SubmissionDao submissionDao) {
+                      SubmissionDao submissionDao, ProblemDao problemDao) {
         this.problemSetDao = problemSetDao;
         this.groupDao = groupDao;
         this.submissionDao = submissionDao;
+        this.problemDao = problemDao;
     }
 
     private ScoreData calculateScores(List<Submission> submissions, Problem problem) {
@@ -42,9 +45,10 @@ public class MonitorController {
         return new ScoreData("+" + String.valueOf(tries), score);
     }
 
+    // TODO: security
     @GetMapping("/contest/{contestId}/group/{groupId}")
-    public List<MonitorElement> showMonitor(@PathVariable Integer contestId,
-                                            @PathVariable Integer groupId) {
+    public List<MonitorElement> showMonitor(@PathVariable Long contestId,
+                                            @PathVariable Long groupId) {
         Optional<ProblemSet> maybeProblemSet = problemSetDao.findById(contestId);
         if (!maybeProblemSet.isPresent()) {
             throw new ResponseStatusException(
@@ -65,7 +69,8 @@ public class MonitorController {
             );
         }
 
-        List<Problem> problemsList = problemSet.getProblems();
+        // TODO: contest makers should be able to specify order
+        List<Problem> problemsList = problemDao.findAllBySetsContainsOrderByNameAsc(problemSet);
         if (problemsList.isEmpty()) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "no tasks in contest found"
@@ -85,26 +90,25 @@ public class MonitorController {
         ArrayList<MonitorElement> monitorElements = new ArrayList<>();
         for (User user : userList) {
             List<Submission> submissions = submissionDao.findByUserIdAndProblemSetId(user.getId(), contestId);
-            HashMap<Integer, ArrayList<Submission>> problemSubmissions = new HashMap<>();
+            HashMap<Long, ArrayList<Submission>> problemSubmissions = new HashMap<>();
             for (Submission submission : submissions) {
-                Integer problemId = submission.getProblem().getId();
+                Long problemId = submission.getProblem().getId();
                 if (!problemSubmissions.containsKey(problemId)) {
                     problemSubmissions.put(problemId, new ArrayList<>());
                 }
                 problemSubmissions.get(submission.getProblem().getId()).add(submission);
             }
-            MonitorElement monitorElement = new MonitorElement();
-            monitorElement.userData.setUserId(user.getId());
-            monitorElement.userData.setUserName(user.getName());
+            UserData userData = new UserData(user.getUsername(), user.getId());
+            MonitorElement monitorElement = new MonitorElement(userData, null);
+            ArrayList<ScoreData> scoreDatas = new ArrayList<>();
             for (Problem problem : problemsList) {
-                ArrayList<ScoreData> scoreDatas = new ArrayList<>();
                 if (!problemSubmissions.containsKey(problem.getId())) {
                     scoreDatas.add(ScoreData.getEmptyInstance());
                 } else {
                     scoreDatas.add(calculateScores(problemSubmissions.get(problem.getId()), problem));
                 }
-                monitorElement.tasksScores = scoreDatas;
             }
+            monitorElement.tasksScores = scoreDatas;
             monitorElements.add(monitorElement);
         }
         // TODO: should we return whole monitor or just objects here?

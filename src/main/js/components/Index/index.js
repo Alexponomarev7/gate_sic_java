@@ -2,18 +2,27 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Switch, Route, BrowserRouter } from 'react-router-dom'
 
-const client = require('./client');
+const client = require('./../../client');
 const bootstrap = require('bootstrap')
 
-import Header from './components/Header'
-import NotFound from './components/NotFound'
-import Competitions from './components/Competitions'
+import Header from './../Header'
+import NotFound from './../NotFound'
+import Competitions from './../Competitions'
+import Login from './../Login'
+import Registration from "./../Registration";
 
-class App extends React.Component {
+import { Layout, notification } from 'antd';
+import {getCurrentUser} from "./../../util/APIUtils";
+import {ACCESS_TOKEN} from "./../../constants";
+import withRouter from "react-router/withRouter";
+const { Content } = Layout;
 
+class Index extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {users: []};
+        this.state = {
+            users: [],
+        };
     }
 
     componentDidMount() {
@@ -41,6 +50,7 @@ class UserList extends React.Component{
                 <tbody>
                 <tr>
                     <th>Id</th>
+                    <th>Pass</th>
                 </tr>
                 {users}
                 </tbody>
@@ -53,23 +63,11 @@ class User extends React.Component{
     render() {
         return (
             <tr>
-                <td>{this.props.user.name}</td>
+                <td>{this.props.user.username}</td>
+                <td>{this.props.user.password}</td>
             </tr>
         )
     }
 }
 
-const Main = () => (
-    <BrowserRouter>
-        <Header />
-        <Switch>
-            <Route exact path='/' component={App}/>
-            <Route path='/competitions' component={Competitions}/>
-        </Switch>
-    </BrowserRouter>
-)
-
-ReactDOM.render(
-    <Main />,
-    document.getElementById('react')
-)
+export default Index;
