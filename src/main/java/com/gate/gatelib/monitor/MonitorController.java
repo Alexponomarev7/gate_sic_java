@@ -1,9 +1,12 @@
 package com.gate.gatelib.monitor;
 
+import com.gate.gatelib.config.CurrentUser;
+import com.gate.gatelib.config.UserPrincipal;
 import com.gate.gatelib.models.*;
 import com.gate.gatelib.repository.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -25,13 +28,16 @@ public class MonitorController {
     private final GroupDao groupDao;
     private final SubmissionDao submissionDao;
     private final ProblemDao problemDao;
+    private final UserDao userDao;
 
     MonitorController(ProblemSetDao problemSetDao, GroupDao groupDao,
-                      SubmissionDao submissionDao, ProblemDao problemDao) {
+                      SubmissionDao submissionDao, ProblemDao problemDao,
+                      UserDao userDao) {
         this.problemSetDao = problemSetDao;
         this.groupDao = groupDao;
         this.submissionDao = submissionDao;
         this.problemDao = problemDao;
+        this.userDao = userDao;
     }
 
     private ScoreData calculateScores(List<Submission> submissions, Problem problem) {
@@ -45,27 +51,41 @@ public class MonitorController {
         return new ScoreData("+" + String.valueOf(tries), score);
     }
 
-    // TODO: security
     @GetMapping("/contest/{contestId}/group/{groupId}")
+    @PreAuthorize("hasRole('USER')")
     public List<MonitorElement> showMonitor(@PathVariable Long contestId,
-                                            @PathVariable Long groupId) {
+                                            @PathVariable Long groupId,
+                                            @CurrentUser UserPrincipal currentUser) {
+        Optional<User> maybeUser = userDao.findById(currentUser.getId());
+        if (!maybeUser.isPresent()) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "User not found"
+            );
+        }
         Optional<ProblemSet> maybeProblemSet = problemSetDao.findById(contestId);
         if (!maybeProblemSet.isPresent()) {
             throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "contest not found"
+                    HttpStatus.BAD_REQUEST, "Contest not found"
             );
         }
         Optional<Group> maybeGroup = groupDao.findById(groupId);
         if (!maybeGroup.isPresent()) {
             throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "group not found"
+                    HttpStatus.BAD_REQUEST, "Group not found"
             );
         }
         ProblemSet problemSet = maybeProblemSet.get();
         Group group = maybeGroup.get();
+
+        if (!group.getUsers().contains(maybeUser.get())) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "User does not belong to the group"
+            );
+        }
+
         if (!group.getSets().contains(problemSet)) {
             throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "group in contest not found"
+                    HttpStatus.BAD_REQUEST, "Group in contest not found"
             );
         }
 
@@ -73,16 +93,11 @@ public class MonitorController {
         List<Problem> problemsList = problemDao.findAllBySetsContainsOrderByNameAsc(problemSet);
         if (problemsList.isEmpty()) {
             throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "no tasks in contest found"
+                    HttpStatus.NOT_FOUND, "No tasks in contest found"
             );
         }
 
         List<User> userList = group.getUsers();
-        if (userList.isEmpty()) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "no users in group found"
-            );
-        }
 
         // TODO: this is simply a group by with custom UDF, can we do than on sql maybe?
         // TODO: hesitant about speed
