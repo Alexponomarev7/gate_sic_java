@@ -17,6 +17,8 @@ public class Problem {
 
     private String name;
 
+    private Integer maxScore;
+
     private String path;
 
     @ManyToMany(cascade = CascadeType.ALL)
@@ -49,6 +51,10 @@ public class Problem {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public Integer getMaxScore() { return maxScore; }
+
+    public void setMaxScore(Integer maxScore) { this.maxScore = maxScore; }
 
     public String getName() {
         return this.name;
