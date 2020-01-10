@@ -59,19 +59,19 @@ public class MonitorController {
         Optional<User> maybeUser = userDao.findById(currentUser.getId());
         if (!maybeUser.isPresent()) {
             throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "User not found"
+                    HttpStatus.BAD_REQUEST, "User not found."
             );
         }
         Optional<ProblemSet> maybeProblemSet = problemSetDao.findById(contestId);
         if (!maybeProblemSet.isPresent()) {
             throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "Contest not found"
+                    HttpStatus.BAD_REQUEST, "Contest not found."
             );
         }
         Optional<Group> maybeGroup = groupDao.findById(groupId);
         if (!maybeGroup.isPresent()) {
             throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "Group not found"
+                    HttpStatus.BAD_REQUEST, "Group not found."
             );
         }
         ProblemSet problemSet = maybeProblemSet.get();
@@ -79,13 +79,13 @@ public class MonitorController {
 
         if (!group.getUsers().contains(maybeUser.get())) {
             throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "User does not belong to the group"
+                    HttpStatus.BAD_REQUEST, "User does not belong to the group."
             );
         }
 
         if (!group.getSets().contains(problemSet)) {
             throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "Group in contest not found"
+                    HttpStatus.BAD_REQUEST, "Group in contest not found."
             );
         }
 
@@ -93,7 +93,7 @@ public class MonitorController {
         List<Problem> problemsList = problemDao.findAllBySetsContainsOrderByNameAsc(problemSet);
         if (problemsList.isEmpty()) {
             throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "No tasks in contest found"
+                    HttpStatus.NOT_FOUND, "No tasks in contest found."
             );
         }
 
@@ -129,5 +129,33 @@ public class MonitorController {
         // TODO: should we return whole monitor or just objects here?
         // TODO: if we do not return whole monitor then what if list of tasks changed?
         return monitorElements;
+    }
+
+    @GetMapping("/contest/{contestId}")
+    @PreAuthorize("hasRole('USER')")
+    public List<MonitorHeaderElement> getMonitorHeader(@PathVariable Long contestId,
+                                                       @CurrentUser UserPrincipal currentUser) {
+        // TODO: move this checks to function
+        Optional<User> maybeUser = userDao.findById(currentUser.getId());
+        if (!maybeUser.isPresent()) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "User not found."
+            );
+        }
+        // TODO: check contest accessibility?
+
+        Optional<ProblemSet> maybeProblemSet = problemSetDao.findById(contestId);
+        if (!maybeProblemSet.isPresent()) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Contest not found."
+            );
+        }
+
+        List<Problem> problemList = problemDao.findAllBySetsContainsOrderByNameAsc(maybeProblemSet.get());
+        List<MonitorHeaderElement> result = new ArrayList<>(problemList.size());
+        for (Problem problem : problemList) {
+            result.add(new MonitorHeaderElement(problem.getName(), problem.getMaxScore()));
+        }
+        return result;
     }
 }

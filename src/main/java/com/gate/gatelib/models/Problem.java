@@ -17,6 +17,8 @@ public class Problem {
 
     private String name;
 
+    private Integer maxScore;
+
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "problems_problemsets",
             joinColumns = @JoinColumn(name = "problems_id"),
@@ -49,7 +51,9 @@ public class Problem {
         this.id = id;
     }
 
+    public Integer getMaxScore() { return maxScore; }
 
+    public void setMaxScore(Integer maxScore) { this.maxScore = maxScore; }
 
     public String getName() {
         return this.name;
