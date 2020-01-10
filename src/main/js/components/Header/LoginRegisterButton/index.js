@@ -16,8 +16,8 @@ class LoginRegisterButton extends React.Component {
     render() {
         if (this.props.isAuthenticated) {
             return (
-            <Item onClick={this.props.handleLogout}
-                  className={"btn btn-outline-primary my-2 my-sm-0"}>Выход</Item>
+            <a onClick={this.props.handleLogout}
+                  className={"btn btn-outline-primary my-2 my-sm-0"}>Выход</a>
             )
         }
         return (
