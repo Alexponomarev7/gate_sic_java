@@ -12,20 +12,6 @@ import {setSubmissionStatus} from "../../../util/APIUtils";
 import {connect} from 'react-redux';
 import {notification} from "antd";
 
-const inputs = [{
-    name: "resolution",
-    placeholder: "resolution",
-    type: "text"
-},{
-    type: "okay",
-    value: "OK",
-    className: "btn"
-},{
-    type: "reject",
-    value: "RJ",
-    className: "btn"
-}];
-
 
 class ReviewForm extends React.Component {
     constructor(props) {
@@ -87,7 +73,8 @@ class SubmissionAdmin extends React.Component {
                     options={{
                         mode: 'python',
                         theme: 'material',
-                        lineNumbers: true
+                        lineNumbers: true,
+                        readOnly: "nocursor"
                     }}
                     onChange={(editor, data, value) => {
                     }}

@@ -21,7 +21,7 @@ const request = (options, content_type='application/json') => {
                 }
                 return json;
             })
-        );
+        ).catch(e => console.warn(e));
 };
 
 export function getUserProfile(username) {
@@ -40,6 +40,10 @@ export function getCurrentUser() {
         url: "/users/me",
         method: 'GET'
     });
+}
+
+export function isAdmin(user) {
+    return user && user.admin;
 }
 
 export function setSubmissionStatus(body) {
@@ -111,6 +115,14 @@ export function loadAdminContests() {
         url: "/api/admin/contests",
         method: 'GET'
     });
+}
+
+export function login(body) {
+    return request({
+        url: '/api/auth/signin',
+        method: 'POST',
+        body: body,
+    })
 }
 
 export function loadAdminContestSubmissions(contestId) {
