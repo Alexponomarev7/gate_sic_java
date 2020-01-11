@@ -9,6 +9,7 @@ import {
 
 import './index.css'
 import {connect} from "react-redux";
+import {isAdmin} from "../../util/APIUtils";
 
 class Header extends React.Component {
     constructor(props) {
@@ -16,6 +17,13 @@ class Header extends React.Component {
     }
 
     render() {
+        let form = null;
+        if (isAdmin(this.props.currentUser)) {
+            form =
+                <li className="nav-item active">
+                    <Link to={'/admin'} className={"nav-link"}>Проверка посылок</Link>
+                </li>
+        }
         return (
             <div className="navbar-container">
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -35,6 +43,7 @@ class Header extends React.Component {
                         <li className="nav-item active">
                             <Link to={'/competitions'} className={"nav-link"}>Соревнования</Link>
                         </li>
+                        {form}
                         <li className="nav-item dropdown">
                             <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -47,12 +56,15 @@ class Header extends React.Component {
                                 <a className="dropdown-item" href="#">Something else here</a>
                             </div>
                         </li>
+                        <li className="nav-item active">
+                            <button className="nav-link" onClick={() => this.props.history.goBack()}>Назад</button>
+                        </li>
                     </ul>
                     <form className="form-inline my-2 my-lg-0">
                         <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"/>
                         <button className="btn btn-outline-success my-2 my-sm-0 mr-2" type="submit">Search</button>
                     </form>
-                    <LoginRegisterButton handleLogout={this.props.handleLogout}/>
+                    <LoginRegisterButton />
                 </div>
             </nav>
             </div>

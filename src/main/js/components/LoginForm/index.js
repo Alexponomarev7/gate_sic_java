@@ -4,12 +4,15 @@ import Form from './../Form'
 import {notification} from 'antd'
 import 'antd/dist/antd.css';
 
+import {getCurrentUser, login} from "../../util/APIUtils"
+
 import {ACCESS_TOKEN} from "../../constants";
 import {
     Route,
     withRouter,
     Switch
 } from 'react-router-dom';
+import {connect} from "react-redux";
 
 class LoginForm extends Form {
     constructor(props) {
@@ -22,31 +25,19 @@ class LoginForm extends Form {
             const data = new FormData(this.form);
             let object = {};
             data.forEach((value, key) => {object[key] = value});
-            let json = JSON.stringify(object);
-            fetch(this.form.action, {
-                method: this.form.method,
-                headers: new Headers({
-                    'Content-Type': 'application/json'
-                }),
-                body: json
-            }).then(response => {
-                if (response.ok) {
-                    response.json().then(json => {
-                        localStorage.setItem(ACCESS_TOKEN, json.accessToken);
-                        this.props.handleLogin();
-                    });
-                } else {
-                    response.json().then(json => {
-                        notification.error({
-                            message: 'Gate',
-                            description: json.message
-                        });
-                    });
-                }
+            login(JSON.stringify(object)).then(json => {
+                localStorage.setItem(ACCESS_TOKEN, json.accessToken);
+                this.props.loginAuth();
+                getCurrentUser().then(this.props.login).catch(this.props.loginFail)
+                this.props.history.push("/");
+                notification.success({
+                    message: 'Gate',
+                    description: 'Login succeed!'
+                });
             }).catch(e => {
                 notification.error({
-                    message: 'Gate',
-                    description: 'Something went wrong. Please try again.'
+                message: 'Gate',
+                description: 'Something went wrong. Please try again.'
                 });
                 console.warn(e);
             });
@@ -57,4 +48,22 @@ class LoginForm extends Form {
 
 }
 
-export default withRouter(LoginForm);
+function mapStateToProps(state) {
+    const tmp = state.userReducer;
+
+    return {
+        isLoading: tmp.isLoading,
+        isAuthenticated: tmp.isAuthenticated,
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        login: (user) => dispatch({type: 'USER_AUTH', payload: user}),
+        loginFail: (err) => dispatch({type: 'USER_FAIL', payload: err}),
+        loginAuth: () => dispatch({type: 'USER_FETCHING'}),
+    }
+
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(LoginForm));

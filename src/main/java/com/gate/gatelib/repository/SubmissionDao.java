@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface SubmissionDao extends JpaRepository<Submission, Long> {
     List<Submission> findAllByProblemSetOrderBySendTSDesc(ProblemSet problemSet);
+    List<Submission> findByUserIdAndProblemSetId(Long userId, Long problemSetId);
 }

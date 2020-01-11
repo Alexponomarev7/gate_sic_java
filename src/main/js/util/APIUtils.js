@@ -21,7 +21,7 @@ const request = (options, content_type='application/json') => {
                 }
                 return json;
             })
-        );
+        ).catch(e => console.warn(e));
 };
 
 export function getUserProfile(username) {
@@ -39,6 +39,21 @@ export function getCurrentUser() {
     return request({
         url: "/users/me",
         method: 'GET'
+    });
+}
+
+export function isAdmin(user) {
+    return user && user.admin;
+}
+
+export function setSubmissionStatus(body) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+    return request({
+        url: "/api/admin/submissions/resolve",
+        method: 'POST',
+        body: body
     });
 }
 
@@ -102,6 +117,14 @@ export function loadAdminContests() {
     });
 }
 
+export function login(body) {
+    return request({
+        url: '/api/auth/signin',
+        method: 'POST',
+        body: body,
+    })
+}
+
 export function loadAdminContestSubmissions(contestId) {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
@@ -120,6 +143,17 @@ export function loadSubmission(submissionId) {
 
     return request({
         url: "/api/admin/submissions/" + submissionId,
+        method: 'GET'
+    });
+}
+
+export function loadProblem(problemId) {
+    if (!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: "/api/problems/" + problemId,
         method: 'GET'
     });
 }

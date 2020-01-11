@@ -17,6 +17,10 @@ public class Problem {
 
     private String name;
 
+    private Integer maxScore;
+
+    private String path;
+
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "problems_problemsets",
             joinColumns = @JoinColumn(name = "problems_id"),
@@ -26,7 +30,6 @@ public class Problem {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL,
             orphanRemoval = true, mappedBy = "problem")
     private Set<Submission> submissions;
-
 
     @JsonIgnore
     public List<ProblemSet> getSets() {
@@ -49,7 +52,9 @@ public class Problem {
         this.id = id;
     }
 
+    public Integer getMaxScore() { return maxScore; }
 
+    public void setMaxScore(Integer maxScore) { this.maxScore = maxScore; }
 
     public String getName() {
         return this.name;
@@ -65,4 +70,12 @@ public class Problem {
     public void setSubmissions(Set<Submission> submissions) { this.submissions = submissions; }
 
     public void addSubmissions(Submission submission) { this.submissions.add(submission); }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
 }

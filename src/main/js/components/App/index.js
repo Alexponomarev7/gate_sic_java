@@ -11,6 +11,7 @@ import Login from './../Login'
 import Registration from "./../Registration";
 import Index from "./../Index"
 import Competition from "./../Competition";
+import Problem from "./../Competition/Problem"
 import {connect} from 'react-redux';
 import AdminApp from './../AdminApp';
 import SubmissionAdmin from '../AdminApp/SubmissionAdmin'
@@ -33,10 +34,6 @@ const { Content } = Layout;
 class Main extends React.Component {
     constructor(props) {
         super(props);
-        this.handleLogout = this.handleLogout.bind(this);
-        this.loadCurrentUser = this.loadCurrentUser.bind(this);
-        this.handleLogin = this.handleLogin.bind(this);
-
         notification.config({
             placement: 'topRight',
             top: 70,
@@ -44,44 +41,14 @@ class Main extends React.Component {
         });
     }
 
-    loadCurrentUser() {
+    componentDidMount() {
         this.props.loginAuth();
-        console.log("authing...")
         getCurrentUser()
             .then(response => {
-                this.props.login(response)
+                this.props.login(response);
             }).catch(error => {
-                console.warn(error)
-                this.props.loginFail(error)
-            });
-    }
-
-    componentDidMount() {
-        this.loadCurrentUser();
-    }
-
-    handleLogin() {
-
-        this.props.history.push("/");
-
-        this.loadCurrentUser();
-
-        notification.success({
-            message: 'Gate',
-            description: 'Login succeed!'
-        });
-    }
-
-    handleLogout(redirectTo="/", notificationType="success", description="You're successfully logged out.") {
-        localStorage.removeItem(ACCESS_TOKEN);
-
-        this.props.history.push(redirectTo);
-
-        this.props.logout();
-
-        notification[notificationType]({
-            message: 'Gate',
-            description: description,
+            console.warn(error);
+            this.props.loginFail(error)
         });
     }
 
@@ -95,6 +62,9 @@ class Main extends React.Component {
         return (
             <Switch>
                 <Route path='/admin'>
+                    <li>
+                        <button onClick={() => this.props.history.goBack()}>Назад</button>
+                    </li>
                     <Switch>
                         <Route exact path='/admin' component={AdminApp}/>
                         <Route path='/admin/competitions/:number' component={CompetitionAdmin}/>
@@ -103,14 +73,13 @@ class Main extends React.Component {
                 </Route>
 
                 <Route path='/'>
-                    <Header handleLogin={this.handleLogin}
-                            handleLogout={this.handleLogout}/>
+                    <Header/>
                     <Switch>
                         <Route exact path='/' component={Index}/>
+                        <Route path='/competitions/:contestId/tasks/:taskId' component={Problem}/>
                         <Route path='/competitions/:number' component={Competition}/>
                         <Route path='/competitions' component={Competitions}/>
-                        <Route path="/login"
-                               render={(props) => <Login handleLogin={this.handleLogin} {...props} />}/>
+                        <Route path="/login" render={(props) => <Login {...props} />}/>
                         <Route path='/registration' render={(props) => <Registration {...props}/>}/>
                     </Switch>
                 </Route>
@@ -133,12 +102,9 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        login: (user) => dispatch({type: 'USER_AUTH', user}),
-        loginFail: (err) => dispatch({type: 'USER_FAIL', err}),
+        login: (user) => dispatch({type: 'USER_AUTH', payload: user}),
+        loginFail: (err) => dispatch({type: 'USER_FAIL', payload: err}),
         loginAuth: () => dispatch({type: 'USER_FETCHING'}),
-        logout: () => dispatch({type:'USER_ANONYMOUS'}),
-        loading: () => dispatch({type:'COMPONENT_LOADING'}),
-        loaded: () => dispatch({type: 'COMPONENT_LOADED'})
     }
 
 }
