@@ -25,7 +25,8 @@ class Header extends React.Component {
                 </li>
         }
         return (
-            <nav className="navbar navbar-expand-lg navbar-light bg-light">
+            <div className="navbar-container">
+            <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
                 <Link to={'/'} className={'navbar-brand'}>Gate</Link>
                 <button className="navbar-toggler" type="button" data-toggle="collapse"
                         data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -34,7 +35,7 @@ class Header extends React.Component {
                     <span className="navbar-toggler-icon"></span>
                 </button>
 
-                <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                <div className="navbar-collapse collapse w-100 dual-collapse2 order-1 order-md-0" id="navbarSupportedContent">
                     <ul className="navbar-nav mr-auto">
                         <li className="nav-item">
                             <a className="nav-link disabled" href="#">Новости<span className="sr-only">(current)</span></a>
@@ -61,11 +62,12 @@ class Header extends React.Component {
                     </ul>
                     <form className="form-inline my-2 my-lg-0">
                         <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"/>
-                        <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                        <button className="btn btn-outline-success my-2 my-sm-0 mr-2" type="submit">Search</button>
                     </form>
                     <LoginRegisterButton />
                 </div>
             </nav>
+            </div>
         );
     }
 }
@@ -93,5 +95,6 @@ function mapDispatchToProps(dispatch) {
     }
 
 }
+
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Header));

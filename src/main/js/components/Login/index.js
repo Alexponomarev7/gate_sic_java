@@ -22,7 +22,8 @@ const props = {
     },{
         type: "submit",
         value: "Submit",
-        className: "btn"
+        className: "btn btn-outline-success",
+        id: "LoginBtn"
     }]
 };
 
@@ -35,8 +36,8 @@ class Login extends React.Component {
 
     render() {
         return (
-            <div>
-                <LoginForm {...props}/>
+            <div className="LoginForm">
+                <LoginForm  {...props}/>
                 <h4><Link to={"/registration"}>Зарегистрироваться</Link></h4>
             </div>
     );
