@@ -79,8 +79,8 @@ class Main extends React.Component {
                         <Route path='/competitions/:contestId/tasks/:taskId' component={Problem}/>
                         <Route path='/competitions/:number' component={Competition}/>
                         <Route path='/competitions' component={Competitions}/>
-                        <Route path="/login" render={(props) => <Login {...props} />}/>
-                        <Route path='/registration' render={(props) => <Registration {...props}/>}/>
+                        <Route path="/login" component={Login}/>
+                        <Route path='/registration' component={Registration}/>
                     </Switch>
                 </Route>
             </Switch>
