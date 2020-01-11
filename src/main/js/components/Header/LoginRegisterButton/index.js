@@ -7,6 +7,8 @@ import {
     Switch
 } from 'react-router-dom';
 import {connect} from "react-redux";
+import {ACCESS_TOKEN} from "../../../constants";
+import {notification} from "antd";
 
 class LoginRegisterButton extends React.Component {
     constructor(props) {
@@ -16,7 +18,15 @@ class LoginRegisterButton extends React.Component {
     render() {
         if (this.props.isAuthenticated) {
             return (
-            <a onClick={this.props.handleLogout}
+            <a onClick={() => {
+                this.props.logout();
+                localStorage.removeItem(ACCESS_TOKEN);
+                this.props.history.push("/");
+                notification.success({
+                    message: 'Gate',
+                    description: "You've been successfully logged out.",
+                });
+            }}
                   className={"btn btn-outline-primary my-2 my-sm-0"}>Выход</a>
             )
         }
