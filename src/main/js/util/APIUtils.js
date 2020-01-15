@@ -158,6 +158,40 @@ export function loadProblem(problemId) {
     });
 }
 
+<<<<<<< HEAD
+export function loadMonitorHeader(contestId) {
+    if (!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: "/api/monitor/contest/" + contestId,
+        method: 'GET'
+    });
+}
+
+export function loadMonitorAutoGroup(contestId) {
+    if (!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: "/api/monitor/contest/" + contestId + "/show",
+        method: 'GET'
+    });
+}
+
+export function loadMonitor(contestId, groupId) {
+    if (!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: "/api/monitor/contest/" + contestId + "/group/" + groupId,
+        method: 'GET'
+    });
+}
+
 export function createContest(body) {
     return request({
         url: "/api/admin/contests",
