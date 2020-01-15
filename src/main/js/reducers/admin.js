@@ -11,9 +11,16 @@ const adminState = {
 const adminReducer = (state=adminState, action) => {
     switch (action.type) {
         case 'ADD_COMPETITIONS':
-            return {
-                ...state,
-                competitions: action.payload
+            if (state.competitions === null) {
+                return {
+                    ...state,
+                    competitions: action.payload
+                }
+            } else {
+                return {
+                    ...state,
+                    competitions: state.competitions.concat([action.payload])
+                }
             }
         case 'ADD_SUBMISSIONS':
             return {

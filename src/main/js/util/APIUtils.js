@@ -157,3 +157,11 @@ export function loadProblem(problemId) {
         method: 'GET'
     });
 }
+
+export function createContest(body) {
+    return request({
+        url: "/api/admin/contests",
+        method: 'POST',
+        body: body,
+    });
+}

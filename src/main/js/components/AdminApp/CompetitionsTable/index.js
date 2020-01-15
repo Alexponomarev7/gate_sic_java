@@ -2,28 +2,22 @@ import React from 'react'
 import {loadAdminContests} from "../../../util/APIUtils";
 import {Link} from "react-router-dom";
 import {connect} from 'react-redux';
+import CompetitionForm from './CompetitionForm'
+import CompetitionListElement from './CompetitionListElement'
 
-
-class CompetitionListElement extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        return (
-            <tr>
-                <th scope="row">{this.props.competition.id}</th>
-                <td>{this.props.competition.name}</td>
-                <td><Link to={'/admin/competitions/' + this.props.competition.id}
-                          className={'btn btn-outline-primary my-2 my-sm-0'}>
-                    Войти
-                </Link>
-                </td>
-            </tr>
-        );
-    }
-
-}
+const props = {
+    inputs: [{
+        name: "name",
+        placeholder: "contest name",
+        type: "text"
+    },
+    {
+        type: "submit",
+        value: "Create new contest",
+        className: "btn btn-outline-success",
+        id: "SubmitBtn"
+    }]
+};
 
 class CompetitionsTable extends React.Component {
     constructor(props) {
@@ -32,8 +26,8 @@ class CompetitionsTable extends React.Component {
 
     componentDidMount() {
         loadAdminContests()
-            .then((responce) => {
-                this.props.setCompetitions(responce
+            .then((response) => {
+                this.props.setCompetitions(response
                     .map(competition => <CompetitionListElement competition={competition}/>))
             })
     }
@@ -51,6 +45,7 @@ class CompetitionsTable extends React.Component {
                 <tbody>
                 {this.props.competitions || "competitions not found"}
                 </tbody>
+                <CompetitionForm {...props}/>
             </table>
         )
     }
@@ -65,7 +60,7 @@ function mapToStateProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        setCompetitions: (responce) => dispatch({type: 'ADD_COMPETITIONS', payload: responce})
+        setCompetitions: (response) => dispatch({type: 'ADD_COMPETITIONS', payload: response})
     }
 }
 
