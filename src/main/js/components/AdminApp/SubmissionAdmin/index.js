@@ -12,20 +12,6 @@ import {setSubmissionStatus} from "../../../util/APIUtils";
 import {connect} from 'react-redux';
 import {notification} from "antd";
 
-const inputs = [{
-    name: "resolution",
-    placeholder: "resolution",
-    type: "text"
-},{
-    type: "okay",
-    value: "OK",
-    className: "btn"
-},{
-    type: "reject",
-    value: "RJ",
-    className: "btn"
-}];
-
 
 class ReviewForm extends React.Component {
     constructor(props) {
@@ -42,24 +28,24 @@ class ReviewForm extends React.Component {
             loadSubmission(this.props.curSub.id).then(this.props.setSub);
             notification.success({
                 message: "Resolution",
-                description: "Resolution is set"})
+                description: "Резолюция записана"})
         }).catch(reason =>
             notification.error({
                 message: "Resolution",
-                description: "Something went wrong"
+                description: "Что-то пошло не так"
             }))
     }
 
     render() {
-        let curRes = 'not found'
+        let curRes = 'не найдена'
         if (this.props.curSub) {
             curRes = this.props.curSub.status || "NA"
         }
 
 
         return <div>
-            Current resolution is {curRes}
-            <input type="text" name="Resolution" onChange={(event) => this.props.setRes(event.target.value)}/>
+            Текущий статус посылки: {curRes}
+            <textarea name="Резолюция" onChange={(event) => this.props.setRes(event.target.value)}/>
             <button onClick={() => this.sendStatus("OK")}>OK</button>
             <button onClick={() => this.sendStatus("RJ")}>RJ</button>
         </div>
@@ -83,11 +69,12 @@ class SubmissionAdmin extends React.Component {
         return (
             <div class='container'>
                 <CodeMirror
-                    value={this.props.curSub ? this.props.curSub.contents : "no code found"}
+                    value={this.props.curSub ? this.props.curSub.contents : "посылка не найдена"}
                     options={{
                         mode: 'python',
                         theme: 'material',
-                        lineNumbers: true
+                        lineNumbers: true,
+                        readOnly: "nocursor"
                     }}
                     onChange={(editor, data, value) => {
                     }}

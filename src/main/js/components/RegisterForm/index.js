@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import Form from './../Form'
 import {notification} from 'antd'
+import {connect} from "react-redux";
+import {withRouter} from "react-router-dom";
 
 
 class RegisterForm extends Form {
@@ -14,13 +16,12 @@ class RegisterForm extends Form {
             const data = new FormData(this.form);
             let object = {};
             data.forEach((value, key) => {object[key] = value});
-            let json = JSON.stringify(object);
-            fetch(this.form.action, {
-                method: this.form.method,
+            fetch("/api/auth/signup", {
+                method: "POST",
                 headers: new Headers({
                     'Content-Type': 'application/json'
                 }),
-                body: json
+                body: JSON.stringify(object)
             }).then(v => {
                 if (v.ok) {
                     v.text().then(text => {
@@ -29,7 +30,7 @@ class RegisterForm extends Form {
                             description: text
                         });
                     });
-                    // TODO: change screen (without redirect). History is undefined here(no matter what)
+                    this.props.history.push("/")
                 } else {
                     v.json().then(json => {
                         notification.error({
@@ -38,7 +39,6 @@ class RegisterForm extends Form {
                         });
                     });
                 }
-                if(v.redirected) window.location = v.url
             }).catch(e => {
                 notification.error({
                     message: 'Gate',
@@ -53,4 +53,4 @@ class RegisterForm extends Form {
 
 }
 
-export default RegisterForm;
+export default withRouter(connect()(RegisterForm));

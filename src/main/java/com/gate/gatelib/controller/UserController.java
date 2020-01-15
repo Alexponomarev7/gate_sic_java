@@ -4,6 +4,7 @@ import com.gate.gatelib.config.CurrentUser;
 import com.gate.gatelib.config.UserPrincipal;
 import com.gate.gatelib.models.*;
 import com.gate.gatelib.payload.UserSummary;
+import com.gate.gatelib.repository.RoleDao;
 import com.gate.gatelib.repository.UserDao;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -11,7 +12,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 
 @RestController
@@ -37,8 +40,17 @@ public class UserController {
     @GetMapping("/me")
     @PreAuthorize("hasRole('USER')")
     public UserSummary getCurrentUser(@CurrentUser UserPrincipal currentUser) {
-        UserSummary userSummary = new UserSummary(currentUser.getId(), currentUser.getUsername());
-        return userSummary;
+        Optional<User> user = userDao.findById(currentUser.getId());
+        boolean isAdmin = false;
+        if (user.isPresent()) {
+            Set<Role> roles = user.get().getRoles();
+            for (Role r : roles) {
+                if (r.getName().name().equals("ROLE_ADMIN")) {
+                    isAdmin = true;
+                }
+            }
+        }
+        return new UserSummary(currentUser.getId(), currentUser.getUsername(), isAdmin);
     }
 
 }

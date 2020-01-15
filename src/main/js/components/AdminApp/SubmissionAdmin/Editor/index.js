@@ -5,7 +5,7 @@ class Editor extends React.Component {
     constructor(props) {
         super(props)
     }
-
+    // FIXME plz use redux...
     updateCode(newCode) {
         this.setState({
             code: newCode,
