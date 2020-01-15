@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Optional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Основной класс-контроллер монитора.
@@ -49,6 +50,36 @@ public class MonitorController {
             tries += 1;
         }
         return new ScoreData("+" + String.valueOf(tries), score);
+    }
+
+    @GetMapping("/contest/{contestId}/show")
+    @PreAuthorize("hasRole('USER')")
+    public List<MonitorElement> showMonitorAutoGroup(@PathVariable Long contestId,
+                                                     @CurrentUser UserPrincipal currentUser) {
+        Optional<User> maybeUser = userDao.findById(currentUser.getId());
+        if (!maybeUser.isPresent()) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "User not found."
+            );
+        }
+        Optional<ProblemSet> maybeProblemSet = problemSetDao.findById(contestId);
+        if (!maybeProblemSet.isPresent()) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Contest not found."
+            );
+        }
+        ProblemSet problemSet = maybeProblemSet.get();
+        User user = maybeUser.get();
+        List<Group> userGroups = user.getGroups();
+        Set<Group> groupSet = problemSet.getGroups();
+        for (Group group : userGroups) {
+            if (groupSet.contains(group)) {
+                return showMonitor(contestId, group.getId(), currentUser);
+            }
+        }
+        throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST, "User does not have acces to this contest."
+        );
     }
 
     @GetMapping("/contest/{contestId}/group/{groupId}")
