@@ -57,7 +57,7 @@ function mapToStateProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        setCompetitions: (response) => dispatch({type: 'ADD_COMPETITIONS', payload: response})
+        setCompetitions: (response) => dispatch({type: 'ADD_TO_LIST_COMPETITIONS', payload: response})
     }
 }
 
