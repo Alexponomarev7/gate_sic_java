@@ -1,4 +1,4 @@
-.Login {
+.registrationForm {
     padding: 10px;
     width: 300px;
     margin: auto;
@@ -6,12 +6,4 @@
     border-radius: 30px/20px;
     top: -50%;
     transform: translateY(50%);
-}
-
-.Login h4 {
-    text-align: center;
-}
-
-#LoginBtn {
-    left: 35%;
 }

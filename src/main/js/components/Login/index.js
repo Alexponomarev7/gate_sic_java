@@ -36,8 +36,8 @@ class Login extends React.Component {
 
     render() {
         return (
-            <div className="LoginForm">
-                <LoginForm  {...props}/>
+            <div className="Login" >
+                <LoginForm handleLogin={this.props.handleLogin} {...props} />
                 <h4><Link to={"/registration"}>Зарегистрироваться</Link></h4>
             </div>
     );
