@@ -158,7 +158,6 @@ export function loadProblem(problemId) {
     });
 }
 
-<<<<<<< HEAD
 export function loadMonitorHeader(contestId) {
     if (!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
