@@ -158,6 +158,7 @@ export function loadProblem(problemId) {
     });
 }
 
+<<<<<<< HEAD
 export function loadMonitorHeader(contestId) {
     if (!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
@@ -188,5 +189,13 @@ export function loadMonitor(contestId, groupId) {
     return request({
         url: "/api/monitor/contest/" + contestId + "/group/" + groupId,
         method: 'GET'
+    });
+}
+
+export function createContest(body) {
+    return request({
+        url: "/api/admin/contests",
+        method: 'POST',
+        body: body,
     });
 }
