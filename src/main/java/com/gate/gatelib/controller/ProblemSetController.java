@@ -80,6 +80,7 @@ public class ProblemSetController {
     @PreAuthorize("hasRole('ADMIN')")
     public ProblemSet createProblemSet(@CurrentUser UserPrincipal currentUser,
                                        @RequestBody ProblemSet problemSet) {
+        System.out.println(problemSet);
         return problemSetDao.save(problemSet);
     }
 
