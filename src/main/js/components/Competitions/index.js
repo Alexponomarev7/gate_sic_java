@@ -18,6 +18,11 @@ class CompetitionList extends React.Component {
                         Войти
                     </Link>
                 </td>
+                <td><Link to={'/competitions/' + this.props.competition.id + '/monitor'}
+                              className={'btn btn-outline-primary my-2 my-sm-0'}>
+                        Монитор
+                    </Link>
+                </td>
             </tr>
         )
     }
@@ -48,6 +53,7 @@ class Competitions extends React.Component {
                             <th scope="col">#</th>
                             <th scope="col">Contest name</th>
                             <th scope="col">Enter</th>
+                            <th scope="col">Monitor</th>
                         </tr>
                     </thead>
                     <tbody>

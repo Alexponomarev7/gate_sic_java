@@ -8,7 +8,7 @@ import java.util.List;
  * POJO, строчка в мониторе
  */
 class MonitorElement {
-    UserData userData;
+    public UserData userData;
     public List<ScoreData> tasksScores;
 
     MonitorElement() {

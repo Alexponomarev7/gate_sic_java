@@ -5,6 +5,7 @@ const client = require('./../../client');
 const bootstrap = require('bootstrap')
 
 import Header from './../Header'
+import Monitor from './../Monitor'
 import NotFound from './../NotFound'
 import Competitions from './../Competitions'
 import Login from './../Login'
@@ -108,6 +109,7 @@ class Main extends React.Component {
                             handleLogout={this.handleLogout}/>
                     <Switch>
                         <Route exact path='/' component={Index}/>
+                        <Route path='/competitions/:number/monitor' component={Monitor}/>
                         <Route path='/competitions/:contestId/tasks/:taskId' component={Problem}/>
                         <Route path='/competitions/:number' component={Competition}/>
                         <Route path='/competitions' component={Competitions}/>
