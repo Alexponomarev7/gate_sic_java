@@ -3,67 +3,7 @@ import ReactDOM from 'react-dom'
 import RegisterForm from './../RegisterForm'
 import {Link} from "react-router-dom"
 import {notification} from "antd";
-
-// let onSuccess = (response) => {
-//     if (response.ok) {
-//         response.text().then(text => {
-//             notification.success({
-//                 message: 'Gate',
-//                 description: text
-//             });
-//         });
-//         // TODO: change screen (without redirect).
-//     } else {
-//         response.json().then(json => {
-//             notification.error({
-//                 message: 'Gate',
-//                 description: json.message
-//             });
-//         });
-//     }
-//     if (response.redirected) window.location = response.url;
-// };
 import './index.css'
-
-
-const inputs = [{
-    name: "username",
-    placeholder: "username",
-    type: "text"
-},{
-    name: "password",
-    placeholder: "password",
-    type: "password"
-},
-{
-    name: "confirmPassword",
-    placeholder: "confirmPassword",
-    type: "password"
-},{
-    type: "submit",
-    value: "Submit",
-    className: "btn btn-outline-success"
-}];
-
-let onSuccess = (response) => {
-    if (response.ok) {
-        response.text().then(text => {
-            notification.success({
-                message: 'Gate',
-                description: text
-            });
-        });
-        // TODO: change screen (without redirect).
-    } else {
-        response.json().then(json => {
-            notification.error({
-                message: 'Gate',
-                description: json.message
-            });
-        });
-    }
-    if (response.redirected) window.location = response.url;
-};
 
 const props = {
     inputs: [{
